@@ -1,11 +1,11 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Setup docker-compose'
+description: 'Automate download and set up process for docker-compose command'
+author: 'Kengo TODA <skypencil@gmail.com>'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  version:
+    required: false
+    description: 'the version of docker-compose command'
+    default: '1.26.2'
 runs:
   using: 'node12'
   main: 'dist/index.js'
