@@ -152,7 +152,7 @@ const install_1 = __webpack_require__(39);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const version = core.getInput('verison', {
+            const version = core.getInput('version', {
                 required: true
             });
             const commandPath = yield install_1.install(version);
