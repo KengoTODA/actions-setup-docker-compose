@@ -91,7 +91,7 @@ function runCommand(command) {
     });
 }
 exports.runCommand = runCommand;
-function install(version) {
+function installOnLinux(version) {
     return __awaiter(this, void 0, void 0, function* () {
         const system = runCommand('uname -s');
         const hardware = runCommand('uname -m');
@@ -99,6 +99,16 @@ function install(version) {
         const installerPath = yield tool_cache_1.downloadTool(url);
         yield exec_1.exec(`chmod +x ${installerPath}`);
         return installerPath;
+    });
+}
+function install(version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        switch (process.platform) {
+            case 'linux':
+                return installOnLinux(version);
+            default:
+                throw new Error(`Unsupported platform: ${process.platform}`);
+        }
     });
 }
 exports.install = install;

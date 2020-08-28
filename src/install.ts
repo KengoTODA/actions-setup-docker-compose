@@ -16,11 +16,20 @@ export async function runCommand(command: string): Promise<string> {
   return output.trim()
 }
 
-export async function install(version: string): Promise<string> {
+async function installOnLinux(version: string): Promise<string> {
   const system = runCommand('uname -s')
   const hardware = runCommand('uname -m')
   const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`
   const installerPath = await downloadTool(url)
   await exec(`chmod +x ${installerPath}`)
   return installerPath
+}
+
+export async function install(version: string): Promise<string> {
+  switch (process.platform) {
+    case 'linux':
+      return installOnLinux(version)
+    default:
+      throw new Error(`Unsupported platform: ${process.platform}`)
+  }
 }
