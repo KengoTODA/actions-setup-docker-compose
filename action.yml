@@ -3,9 +3,8 @@ description: 'Automate download and set up process for docker-compose command'
 author: 'Kengo TODA <skypencil@gmail.com>'
 inputs:
   version:
-    required: false
+    required: true
     description: 'the version of docker-compose command'
-    default: '1.26.2'
 runs:
   using: 'node12'
   main: 'dist/index.js'
