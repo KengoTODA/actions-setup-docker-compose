@@ -2,7 +2,7 @@
 
 <a href="https://github.com/KengoTODA/actions-setup-docker-compose/actions"><img alt="actions-setup-docker-compose status" src="https://github.com/KengoTODA/actions-setup-docker-compose/workflows/build-test/badge.svg"></a>
 
-This action downloads the `docker-compose` command and add it to the `PATH` for following execution. It supports Linux environment only.
+This action downloads the `docker-compose` command and add it to the `PATH` for following executions. It supports the Linux environment only.
 
 ## How to use
 
