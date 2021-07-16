@@ -1,6 +1,6 @@
 {
   "name": "@kengotoda/actions-setup-docker-compose",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
   "private": false,
@@ -55,9 +55,12 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/npm",
       "@semantic-release/github",
-      ["@semantic-release/exec", {
-        "prepare": "npm run package"
-      }],
+      [
+        "@semantic-release/exec",
+        {
+          "prepare": "npm run package"
+        }
+      ],
       [
         "@semantic-release/git",
         {
