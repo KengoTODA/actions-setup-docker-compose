@@ -1,8 +1,7 @@
 {
-  "name": "typescript-action",
+  "name": "actions-setup-docker-compose",
   "version": "0.0.0",
-  "private": true,
-  "description": "TypeScript template action",
+  "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/kengotoda/actions-setup-docker-compose.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "Kengo TODA <skypencil@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.4.0",
