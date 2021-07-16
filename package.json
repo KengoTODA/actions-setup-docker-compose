@@ -29,6 +29,8 @@
     "@actions/tool-cache": "^1.7.1"
   },
   "devDependencies": {
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
     "@types/node": "^16.3.2",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.28.6",
@@ -38,7 +40,30 @@
     "jest": "^27.0.6",
     "js-yaml": "^4.1.0",
     "prettier": "2.3.2",
+    "semantic-release": "^17.4.4",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.5"
+  },
+  "release": {
+    "branches": "main",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      ["@semantic-release/exec", {
+        "prepare": "npm run package"
+      }],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "dist",
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
   }
 }

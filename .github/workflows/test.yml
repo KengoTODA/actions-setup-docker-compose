@@ -21,6 +21,12 @@ jobs:
       - run: |
           npm ci
           npm run all
+      - name: Run semantic-release
+        run: |
+          npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
