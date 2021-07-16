@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
+  "private": "false",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
