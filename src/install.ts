@@ -1,5 +1,5 @@
-import {exec} from '@actions/exec'
 import {downloadTool} from '@actions/tool-cache'
+import {exec} from '@actions/exec'
 
 export async function runCommand(command: string): Promise<string> {
   let output = ''
