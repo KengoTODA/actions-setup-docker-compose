@@ -9,7 +9,7 @@ async function run(): Promise<void> {
     const commandPath = await install(version)
     core.addPath(commandPath)
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(error instanceof Error ? error.message : 'Unknown error')
   }
 }
 

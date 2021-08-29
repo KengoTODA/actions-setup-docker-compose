@@ -22,7 +22,7 @@ const exec_1 = __nccwpck_require__(514);
 function runCommand(command) {
     return __awaiter(this, void 0, void 0, function* () {
         let output = '';
-        const result = yield exec_1.exec(command, [], {
+        const result = yield (0, exec_1.exec)(command, [], {
             listeners: {
                 stdout: (data) => {
                     output += data.toString();
@@ -41,8 +41,8 @@ function installOnLinux(version) {
         const system = runCommand('uname -s');
         const hardware = runCommand('uname -m');
         const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${yield system}-${yield hardware}`;
-        const installerPath = yield tool_cache_1.downloadTool(url);
-        yield exec_1.exec(`chmod +x ${installerPath}`);
+        const installerPath = yield (0, tool_cache_1.downloadTool)(url);
+        yield (0, exec_1.exec)(`chmod +x ${installerPath}`);
         return installerPath;
     });
 }
@@ -103,11 +103,11 @@ function run() {
             const version = core.getInput('version', {
                 required: true
             });
-            const commandPath = yield install_1.install(version);
+            const commandPath = yield (0, install_1.install)(version);
             core.addPath(commandPath);
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed(error instanceof Error ? error.message : "Unknown error");
         }
     });
 }
