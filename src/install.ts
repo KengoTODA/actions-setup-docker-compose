@@ -1,4 +1,4 @@
-import {downloadTool} from '@actions/tool-cache'
+import {cacheFile, downloadTool} from '@actions/tool-cache'
 import {exec} from '@actions/exec'
 
 export async function runCommand(command: string): Promise<string> {
@@ -22,7 +22,8 @@ async function installOnLinux(version: string): Promise<string> {
   const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`
   const installerPath = await downloadTool(url)
   await exec(`chmod +x ${installerPath}`)
-  return installerPath
+  const cachedPath = await cacheFile(installerPath, 'docker-compose', 'docker-compose', version);
+  return cachedPath
 }
 
 export async function install(version: string): Promise<string> {
