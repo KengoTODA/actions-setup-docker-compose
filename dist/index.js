@@ -43,7 +43,8 @@ function installOnLinux(version) {
         const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${yield system}-${yield hardware}`;
         const installerPath = yield (0, tool_cache_1.downloadTool)(url);
         yield (0, exec_1.exec)(`chmod +x ${installerPath}`);
-        return installerPath;
+        const cachedPath = yield (0, tool_cache_1.cacheFile)(installerPath, 'docker-compose', 'docker-compose', version);
+        return cachedPath;
     });
 }
 function install(version) {
@@ -107,7 +108,7 @@ function run() {
             core.addPath(commandPath);
         }
         catch (error) {
-            core.setFailed(error instanceof Error ? error.message : "Unknown error");
+            core.setFailed(error instanceof Error ? error.message : 'Unknown error');
         }
     });
 }
