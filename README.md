@@ -12,7 +12,7 @@ Add a step to your workflow like below:
   steps:
   - uses: KengoTODA/actions-setup-docker-compose@main
     with:
-      version: '1.26.2'
+      version: '1.29.2'
 ```
 
 The `version` parameter is required, specify the full version of `docker-compose` command.
