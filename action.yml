@@ -5,6 +5,9 @@ inputs:
   version:
     required: true
     description: 'the version of docker-compose command'
+branding:
+  color: blue
+  icon: play
 runs:
   using: 'node12'
   main: 'dist/index.js'
