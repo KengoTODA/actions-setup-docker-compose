@@ -14,13 +14,10 @@ jobs:
         with:
           # Make sure the release step uses its own credentials.
           persist-credentials: false
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
       - uses: actions/setup-node@v3
         with:
           cache: npm
-          node-version: ${{ steps.nvm.outputs.NVMRC }}
+          node-version-file: '.nvmrc'
       - run: |
           npm ci
           npm run all
