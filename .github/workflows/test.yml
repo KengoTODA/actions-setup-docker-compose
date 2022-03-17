@@ -10,14 +10,14 @@ jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # Make sure the release step uses its own credentials.
           persist-credentials: false
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           cache: npm
           node-version: ${{ steps.nvm.outputs.NVMRC }}
@@ -33,7 +33,7 @@ jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         with:
           version: '1.26.2'
