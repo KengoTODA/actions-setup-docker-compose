@@ -34,3 +34,6 @@ jobs:
       - uses: ./
         with:
           version: '1.26.2'
+      - uses: ./
+        with:
+          version: '2.4.1'
