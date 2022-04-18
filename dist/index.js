@@ -28,7 +28,9 @@ exports.runCommand = runCommand;
 async function installOnLinux(version) {
     const system = runCommand('uname -s');
     const hardware = runCommand('uname -m');
-    version = parseInt(version.split('.')[0], 10) >= 2 ? `v${version}` : version;
+    if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
+        version = `v${version}`;
+    }
     const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`;
     const installerPath = await (0, tool_cache_1.downloadTool)(url);
     await (0, exec_1.exec)(`chmod +x ${installerPath}`);

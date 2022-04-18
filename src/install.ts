@@ -19,7 +19,9 @@ export async function runCommand(command: string): Promise<string> {
 async function installOnLinux(version: string): Promise<string> {
   const system = runCommand('uname -s')
   const hardware = runCommand('uname -m')
-  version = parseInt(version.split('.')[0], 10) >= 2 ? `v${version}` : version
+  if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
+    version = `v${version}`
+  }
   const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`
   const installerPath = await downloadTool(url)
   await exec(`chmod +x ${installerPath}`)
