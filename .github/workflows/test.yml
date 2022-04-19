@@ -37,3 +37,6 @@ jobs:
       - uses: ./
         with:
           version: '2.4.1'
+      - uses: ./
+        with:
+          version: 'v2.4.1'
