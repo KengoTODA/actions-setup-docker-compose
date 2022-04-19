@@ -19,4 +19,5 @@ test('Install the right version', async () => {
   await testVersion('1.29.1')
   await testVersion('1.29.2')
   await testVersion('2.2.3')
+  await testVersion('v2.2.3')
 })
