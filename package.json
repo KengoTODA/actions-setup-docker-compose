@@ -1,6 +1,6 @@
 {
   "name": "@kengotoda/actions-setup-docker-compose",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
   "private": false,
