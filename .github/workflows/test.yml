@@ -42,6 +42,15 @@ jobs:
           version: 'v2.4.1'
   actionlint:
     runs-on: ubuntu-latest
+    if: github.event.pull_request
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: reviewdog/action-actionlint@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          reporter: github-pr-review
