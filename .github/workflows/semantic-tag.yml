@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: v1.0.3 # or ${{ github.event.release.tag_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
@@ -38,10 +39,10 @@ jobs:
               major: `v${semver.major(TAG_NAME).toString()}`
             }
       - run: |
-          git tag -f $MAJOR_VER
-          git tag -f $MINOR_VER
-          echo git push origin +$MAJOR_VER
-          echo git push origin +$MINOR_VER
+          git tag -f "$MAJOR_VER"
+          git tag -f "$MINOR_VER"
+          echo git push origin -f "$MAJOR_VER"
+          echo git push origin -f "$MINOR_VER"
         env:
           MAJOR_VER: ${{ fromJSON(steps.batch.outputs.result).major }}
           MINOR_VER: ${{ fromJSON(steps.batch.outputs.result).minor }}
