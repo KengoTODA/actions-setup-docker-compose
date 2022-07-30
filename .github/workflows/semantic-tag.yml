@@ -32,7 +32,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            import semver from 'semver'
+            const semver = require('semver')
             const { TAG_NAME } = process.env
             return `v${semver.major(TAG_NAME).toString()}`
       - name: Get the minor version
@@ -41,7 +41,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            import semver from 'semver'
+            const semver = require('semver')
             const { TAG_NAME } = process.env
             return `v${semver.major(TAG_NAME).toString()}.${semver.minor(TAG_NAME).toString()}`
       - name: Get versions
@@ -49,7 +49,7 @@ jobs:
         id: batch
         with:
           script: |
-            import semver from 'semver'
+            const semver = require('semver')
             const { TAG_NAME } = process.env
             return {
               minor: `v${semver.major(TAG_NAME).toString()}.${semver.minor(TAG_NAME).toString()}`,
