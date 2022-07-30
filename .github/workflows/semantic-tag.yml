@@ -13,40 +13,22 @@ permissions:
 
 jobs:
   publish:
-    env:
-      TAG_NAME: v1.0.3 # or ${{ github.event.release.tag_name }} 
     runs-on: ubuntu-latest
     steps:
       # Release with semantic tag like v1.0.3
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: v1.0.3
+          ref: v1.0.3 # or ${{ github.event.release.tag_name }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
       - run: npm install semver
-      - name: Get the major version
-        uses: actions/github-script@v6
-        id: major
-        with:
-          result-encoding: string
-          script: |
-            const semver = require('semver')
-            const { TAG_NAME } = process.env
-            return `v${semver.major(TAG_NAME).toString()}`
-      - name: Get the minor version
-        uses: actions/github-script@v6
-        id: minor
-        with:
-          result-encoding: string
-          script: |
-            const semver = require('semver')
-            const { TAG_NAME } = process.env
-            return `v${semver.major(TAG_NAME).toString()}.${semver.minor(TAG_NAME).toString()}`
       - name: Get versions
         uses: actions/github-script@v6
         id: batch
+        env:
+          TAG_NAME: v1.0.3 # or ${{ github.event.release.tag_name }}
         with:
           script: |
             const semver = require('semver')
@@ -56,6 +38,10 @@ jobs:
               major: `v${semver.major(TAG_NAME).toString()}`
             }
       - run: |
-          echo major version is ${{ steps.major.outputs.result }}
-          echo minor version is ${{ steps.minor.outputs.result }}
-          echo try to get a part of batch version: ${{ fromJSON(steps.batch.outputs.result).minor }}
+          git tag -f $MAJOR_VER
+          git tag -f $MINOR_VER
+          echo git push origin +$MAJOR_VER
+          echo git push origin +$MINOR_VER
+        env:
+          MAJOR_VER: ${{ fromJSON(steps.batch.outputs.result).major }}
+          MINOR_VER: ${{ fromJSON(steps.batch.outputs.result).minor }}
