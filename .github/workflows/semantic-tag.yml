@@ -1,9 +1,6 @@
 name: Publish semantic tags
 
 on:
-  push:
-    branches:
-      - enhance-workflows
   release:
     types:
       - published
@@ -19,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: v1.0.3 # or ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.release.tag_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
         with:
@@ -29,7 +26,7 @@ jobs:
         uses: actions/github-script@v6
         id: batch
         env:
-          TAG_NAME: v1.0.3 # or ${{ github.event.release.tag_name }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
         with:
           script: |
             const semver = require('semver')
@@ -41,8 +38,8 @@ jobs:
       - run: |
           git tag -f "$MAJOR_VER"
           git tag -f "$MINOR_VER"
-          echo git push origin -f "$MAJOR_VER"
-          echo git push origin -f "$MINOR_VER"
+          git push origin -f "$MAJOR_VER"
+          git push origin -f "$MINOR_VER"
         env:
           MAJOR_VER: ${{ fromJSON(steps.batch.outputs.result).major }}
           MINOR_VER: ${{ fromJSON(steps.batch.outputs.result).minor }}
