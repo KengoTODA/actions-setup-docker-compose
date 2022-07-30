@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: $TAG_NAME
+          ref: v1.0.3
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
@@ -43,7 +43,20 @@ jobs:
           script: |
             import semver from 'semver'
             const { TAG_NAME } = process.env
-            return `v${semver.major(TAG_NAME).toString()}.${semver.major(TAG_NAME).toString()}`
+            return `v${semver.major(TAG_NAME).toString()}.${semver.minor(TAG_NAME).toString()}`
+      - name: Get versions
+        uses: actions/github-script@v6
+        id: batch
+        with:
+          script: |
+            import semver from 'semver'
+            const { TAG_NAME } = process.env
+            return {
+              minor: `v${semver.major(TAG_NAME).toString()}.${semver.minor(TAG_NAME).toString()}`,
+              major: `v${semver.major(TAG_NAME).toString()}`
+            }
       - run: |
           echo major version is ${{ steps.major.outputs.result }}
           echo minor version is ${{ steps.minor.outputs.result }}
+          echo batch version is ${{ steps.batch.outputs.result }}
+          echo try to get a part of batch version: ${{ steps.batch.outputs.result.minor }}
