@@ -58,5 +58,4 @@ jobs:
       - run: |
           echo major version is ${{ steps.major.outputs.result }}
           echo minor version is ${{ steps.minor.outputs.result }}
-          echo batch version is ${{ steps.batch.outputs.result }}
-          echo try to get a part of batch version: ${{ steps.batch.outputs.result.minor }}
+          echo try to get a part of batch version: ${{ fromJSON(steps.batch.outputs.result).minor }}
