@@ -1,0 +1,49 @@
+name: Publish semantic tags
+
+on:
+  push:
+    branches:
+      - enhance-workflows
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    env:
+      TAG_NAME: v1.0.3 # or ${{ github.event.release.tag_name }} 
+    runs-on: ubuntu-latest
+    steps:
+      # Release with semantic tag like v1.0.3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: $TAG_NAME
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - run: npm install semver
+      - name: Get the major version
+        uses: actions/github-script@v6
+        id: major
+        with:
+          result-encoding: string
+          script: |
+            import semver from 'semver'
+            const { TAG_NAME } = process.env
+            return `v${semver.major(TAG_NAME).toString()}`
+      - name: Get the minor version
+        uses: actions/github-script@v6
+        id: minor
+        with:
+          result-encoding: string
+          script: |
+            import semver from 'semver'
+            const { TAG_NAME } = process.env
+            return `v${semver.major(TAG_NAME).toString()}.${semver.major(TAG_NAME).toString()}`
+      - run: |
+          echo major version is ${{ steps.major.outputs.result }}
+          echo minor version is ${{ steps.minor.outputs.result }}
