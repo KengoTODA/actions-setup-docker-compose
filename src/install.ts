@@ -1,5 +1,7 @@
 import {cacheFile, downloadTool} from '@actions/tool-cache'
 import {exec} from '@actions/exec'
+import * as core from '@actions/core'
+import {Octokit} from '@octokit/action'
 
 export async function runCommand(command: string): Promise<string> {
   let output = ''
@@ -34,7 +36,20 @@ async function installOnLinux(version: string): Promise<string> {
   return cachedPath
 }
 
+async function findLatestVersion(): Promise<string> {
+  const octokit = new Octokit()
+  const response = await octokit.repos.getLatestRelease({
+    owner: 'docker',
+    repo: 'compose'
+  })
+  return response.data.tag_name
+}
+
 export async function install(version: string): Promise<string> {
+  if (version === 'latest') {
+    version = await findLatestVersion()
+    core.info(`Requested to use the latest version: ${version}`)
+  }
   switch (process.platform) {
     case 'linux':
       return installOnLinux(version)
