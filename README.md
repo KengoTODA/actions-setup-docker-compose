@@ -12,10 +12,9 @@ Add a step to your workflow like below:
   steps:
   - uses: KengoTODA/actions-setup-docker-compose@main
     with:
-      version: '1.29.2'
+      version: '2.14.2' # the full version of `docker-compose` command
 ```
 
-Specify the full version of `docker-compose` command to the `version` parameter.
 Or you can omit it then set a `GITHUB_TOKEN` environment variable, to use the latest released version:
 
 ```yml
@@ -24,3 +23,5 @@ Or you can omit it then set a `GITHUB_TOKEN` environment variable, to use the la
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+The 'latest release' here means [the most recent non-prerelease, non-draft release, sorted by the created_at attribute](https://octokit.github.io/rest.js/v19#repos-get-latest-release).
