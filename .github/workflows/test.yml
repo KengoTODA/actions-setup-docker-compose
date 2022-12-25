@@ -21,6 +21,8 @@ jobs:
       - run: |
           npm ci
           npm run all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run semantic-release
         run: |
           npx semantic-release
@@ -43,7 +45,6 @@ jobs:
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: ./
 
   actionlint:
     runs-on: ubuntu-latest
