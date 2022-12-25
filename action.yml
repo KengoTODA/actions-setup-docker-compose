@@ -3,7 +3,7 @@ description: 'Automate download and set up process for docker-compose command'
 author: 'Kengo TODA <skypencil@gmail.com>'
 inputs:
   version:
-    required: true
+    default: 'latest'
     description: 'the version of docker-compose command'
 branding:
   color: blue
