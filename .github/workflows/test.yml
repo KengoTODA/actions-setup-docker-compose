@@ -41,6 +41,9 @@ jobs:
         with:
           version: 'v2.4.1'
       - uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   actionlint:
     runs-on: ubuntu-latest
     if: github.event.pull_request
