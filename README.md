@@ -25,3 +25,5 @@ Or you can omit it then set a `GITHUB_TOKEN` environment variable, to use the la
 ```
 
 The 'latest release' here means [the most recent non-prerelease, non-draft release, sorted by the created_at attribute](https://octokit.github.io/rest.js/v19#repos-get-latest-release).
+
+Note that the `GITHUB_TOKEN` should have `contents: read` permission to fetch data from the GitHub.com.

@@ -31,6 +31,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: ./
