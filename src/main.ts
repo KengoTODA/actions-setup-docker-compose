@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import {install} from './install'
 import {Octokit} from '@octokit/action'
 
-async function findLatestVersion() {
+async function findLatestVersion(): Promise<string> {
   const octokit = new Octokit()
   const response = await octokit.repos.getLatestRelease({
     owner: 'docker',
