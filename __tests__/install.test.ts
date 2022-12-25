@@ -18,4 +18,10 @@ describe('install', () => {
     const result = await runCommand('docker-compose version')
     expect(result).toContain(version)
   })
+  it('can install latest version', async () => {
+    const commandPath = await install('latest')
+    core.addPath(commandPath)
+    const result = await runCommand('docker-compose version')
+    expect(result).not.toBeFalsy()
+  })
 })

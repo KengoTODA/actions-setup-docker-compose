@@ -21,6 +21,8 @@ jobs:
       - run: |
           npm ci
           npm run all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run semantic-release
         run: |
           npx semantic-release
@@ -29,6 +31,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: ./
@@ -40,6 +44,10 @@ jobs:
       - uses: ./
         with:
           version: 'v2.4.1'
+      - uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   actionlint:
     runs-on: ubuntu-latest
     if: github.event.pull_request

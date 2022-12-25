@@ -4,7 +4,7 @@ import {install} from './install'
 async function run(): Promise<void> {
   try {
     const version: string = core.getInput('version', {
-      required: true
+      trimWhitespace: true
     })
     const commandPath = await install(version)
     core.addPath(commandPath)
