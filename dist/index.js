@@ -2,14 +2,39 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 9039:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = exports.runCommand = void 0;
 const tool_cache_1 = __nccwpck_require__(7784);
 const exec_1 = __nccwpck_require__(1514);
+const core = __importStar(__nccwpck_require__(2186));
+const action_1 = __nccwpck_require__(1231);
 async function runCommand(command) {
     let output = '';
     const result = await (0, exec_1.exec)(command, [], {
@@ -37,7 +62,19 @@ async function installOnLinux(version) {
     const cachedPath = await (0, tool_cache_1.cacheFile)(installerPath, 'docker-compose', 'docker-compose', version);
     return cachedPath;
 }
+async function findLatestVersion() {
+    const octokit = new action_1.Octokit();
+    const response = await octokit.repos.getLatestRelease({
+        owner: 'docker',
+        repo: 'compose'
+    });
+    return response.data.tag_name;
+}
 async function install(version) {
+    if (version === 'latest') {
+        version = await findLatestVersion();
+        core.info(`Requested to use the latest version: ${version}`);
+    }
     switch (process.platform) {
         case 'linux':
             return installOnLinux(version);
@@ -81,23 +118,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const install_1 = __nccwpck_require__(9039);
-const action_1 = __nccwpck_require__(1231);
-async function findLatestVersion() {
-    const octokit = new action_1.Octokit();
-    const response = await octokit.repos.getLatestRelease({
-        owner: 'docker',
-        repo: 'compose'
-    });
-    return response.data.tag_name;
-}
 async function run() {
     try {
-        let version = core.getInput('version', {
+        const version = core.getInput('version', {
             trimWhitespace: true
         });
-        if (version === 'latest') {
-            version = await findLatestVersion();
-        }
         const commandPath = await (0, install_1.install)(version);
         core.addPath(commandPath);
     }
