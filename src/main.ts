@@ -14,7 +14,7 @@ async function findLatestVersion(): Promise<string> {
 async function run(): Promise<void> {
   try {
     let version: string = core.getInput('version', {
-      required: true
+      trimWhitespace: true
     })
     if (version === 'latest') {
       version = await findLatestVersion()
