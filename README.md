@@ -15,4 +15,12 @@ Add a step to your workflow like below:
       version: '1.29.2'
 ```
 
-The `version` parameter is required, specify the full version of `docker-compose` command.
+Specify the full version of `docker-compose` command to the `version` parameter.
+Or you can omit it then set a `GITHUB_TOKEN` environment variable, to use the latest released version:
+
+```yml
+  steps:
+  - uses: KengoTODA/actions-setup-docker-compose@main
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
