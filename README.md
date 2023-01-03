@@ -4,6 +4,8 @@
 
 This action downloads the `docker-compose` command and add it to the `PATH` for following executions. It supports the Linux environment only.
 
+⚠ The `docker-compose` command is now deprecated, consider to use the `docker compose` sub command instead. Refer to [Docker official blog](https://www.docker.com/blog/announcing-compose-v2-general-availability/) for detail.
+
 ## How to use
 
 Add a step to your workflow like below:
