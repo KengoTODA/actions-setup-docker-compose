@@ -12,12 +12,12 @@ Add a step to your workflow like below:
 
 ```yml
   steps:
-  - uses: KengoTODA/actions-setup-docker-compose@main
+  - uses: KengoTODA/actions-setup-docker-compose@v1
     with:
       version: '2.14.2' # the full version of `docker-compose` command
 ```
 
-Or you can omit it then set a `GITHUB_TOKEN` environment variable, to use the latest released version:
+Or set a `GITHUB_TOKEN` environment variable, to use the latest released version:
 
 ```yml
   steps:
