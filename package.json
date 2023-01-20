@@ -31,7 +31,7 @@
     "@actions/core": "^1.4.0",
     "@actions/exec": "^1.1.0",
     "@actions/tool-cache": "^2.0.1",
-    "@octokit/action": "^4.0.10"
+    "@octokit/action": "^5.0.0"
   },
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
