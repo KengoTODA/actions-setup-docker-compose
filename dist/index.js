@@ -5218,7 +5218,7 @@ var authAction = __nccwpck_require__(20);
 var pluginPaginateRest = __nccwpck_require__(9331);
 var pluginRestEndpointMethods = __nccwpck_require__(8528);
 
-const VERSION = "5.0.1";
+const VERSION = "5.0.2";
 
 const HttpsProxyAgent = __nccwpck_require__(7219);
 const DEFAULTS = {
@@ -5290,7 +5290,6 @@ function withAuthorizationPrefix(token) {
   if (token.split(/\./).length === 3) {
     return `bearer ${token}`;
   }
-
   return `token ${token}`;
 }
 
@@ -5304,11 +5303,9 @@ const createTokenAuth = function createTokenAuth(token) {
   if (!token) {
     throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
   }
-
   if (typeof token !== "string") {
     throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
   }
-
   token = token.replace(/^(token|bearer) +/i, "");
   return Object.assign(auth.bind(null, token), {
     hook: hook.bind(null, token)
@@ -5335,7 +5332,7 @@ var request = __nccwpck_require__(6094);
 var graphql = __nccwpck_require__(3526);
 var authToken = __nccwpck_require__(1793);
 
-const VERSION = "4.1.0";
+const VERSION = "4.2.0";
 
 class Octokit {
   constructor(options = {}) {
@@ -5797,7 +5794,7 @@ function withDefaults(oldDefaults, newDefaults) {
   });
 }
 
-const VERSION = "7.0.4";
+const VERSION = "7.0.5";
 
 const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
 // DEFAULTS has all properties set that EndpointOptions has, except url.
@@ -7284,7 +7281,7 @@ var isPlainObject = __nccwpck_require__(3287);
 var nodeFetch = _interopDefault(__nccwpck_require__(467));
 var requestError = __nccwpck_require__(5203);
 
-const VERSION = "6.2.2";
+const VERSION = "6.2.3";
 
 function getBufferResponse(response) {
   return response.arrayBuffer();
@@ -7292,48 +7289,40 @@ function getBufferResponse(response) {
 
 function fetchWrapper(requestOptions) {
   const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
-
   if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
     requestOptions.body = JSON.stringify(requestOptions.body);
   }
-
   let headers = {};
   let status;
   let url;
-  const fetch = requestOptions.request && requestOptions.request.fetch || globalThis.fetch ||
-  /* istanbul ignore next */
-  nodeFetch;
+  const fetch = requestOptions.request && requestOptions.request.fetch || globalThis.fetch || /* istanbul ignore next */nodeFetch;
   return fetch(requestOptions.url, Object.assign({
     method: requestOptions.method,
     body: requestOptions.body,
     headers: requestOptions.headers,
     redirect: requestOptions.redirect
-  }, // `requestOptions.request.agent` type is incompatible
+  },
+  // `requestOptions.request.agent` type is incompatible
   // see https://github.com/octokit/types.ts/pull/264
   requestOptions.request)).then(async response => {
     url = response.url;
     status = response.status;
-
     for (const keyAndValue of response.headers) {
       headers[keyAndValue[0]] = keyAndValue[1];
     }
-
     if ("deprecation" in headers) {
       const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
       const deprecationLink = matches && matches.pop();
       log.warn(`[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`);
     }
-
     if (status === 204 || status === 205) {
       return;
-    } // GitHub API returns 200 for HEAD requests
-
-
+    }
+    // GitHub API returns 200 for HEAD requests
     if (requestOptions.method === "HEAD") {
       if (status < 400) {
         return;
       }
-
       throw new requestError.RequestError(response.statusText, status, {
         response: {
           url,
@@ -7344,7 +7333,6 @@ function fetchWrapper(requestOptions) {
         request: requestOptions
       });
     }
-
     if (status === 304) {
       throw new requestError.RequestError("Not modified", status, {
         response: {
@@ -7356,7 +7344,6 @@ function fetchWrapper(requestOptions) {
         request: requestOptions
       });
     }
-
     if (status >= 400) {
       const data = await getResponseData(response);
       const error = new requestError.RequestError(toErrorMessage(data), status, {
@@ -7370,7 +7357,6 @@ function fetchWrapper(requestOptions) {
       });
       throw error;
     }
-
     return getResponseData(response);
   }).then(data => {
     return {
@@ -7386,57 +7372,45 @@ function fetchWrapper(requestOptions) {
     });
   });
 }
-
 async function getResponseData(response) {
   const contentType = response.headers.get("content-type");
-
   if (/application\/json/.test(contentType)) {
     return response.json();
   }
-
   if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
     return response.text();
   }
-
   return getBufferResponse(response);
 }
-
 function toErrorMessage(data) {
-  if (typeof data === "string") return data; // istanbul ignore else - just in case
-
+  if (typeof data === "string") return data;
+  // istanbul ignore else - just in case
   if ("message" in data) {
     if (Array.isArray(data.errors)) {
       return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}`;
     }
-
     return data.message;
-  } // istanbul ignore next - just in case
-
-
+  }
+  // istanbul ignore next - just in case
   return `Unknown error: ${JSON.stringify(data)}`;
 }
 
 function withDefaults(oldEndpoint, newDefaults) {
   const endpoint = oldEndpoint.defaults(newDefaults);
-
   const newApi = function (route, parameters) {
     const endpointOptions = endpoint.merge(route, parameters);
-
     if (!endpointOptions.request || !endpointOptions.request.hook) {
       return fetchWrapper(endpoint.parse(endpointOptions));
     }
-
     const request = (route, parameters) => {
       return fetchWrapper(endpoint.parse(endpoint.merge(route, parameters)));
     };
-
     Object.assign(request, {
       endpoint,
       defaults: withDefaults.bind(null, endpoint)
     });
     return endpointOptions.request.hook(request, endpointOptions);
   };
-
   return Object.assign(newApi, {
     endpoint,
     defaults: withDefaults.bind(null, endpoint)
