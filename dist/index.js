@@ -5206,38 +5206,66 @@ function copyFile(srcFile, destFile, force) {
 /***/ }),
 
 /***/ 1231:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+// pkg/dist-src/index.js
+var dist_src_exports = {};
+__export(dist_src_exports, {
+  Octokit: () => Octokit,
+  RestEndpointMethodTypes: () => import_plugin_rest_endpoint_methods2.RestEndpointMethodTypes
+});
+module.exports = __toCommonJS(dist_src_exports);
+var import_core = __nccwpck_require__(8134);
+var import_auth_action = __nccwpck_require__(20);
+var import_plugin_paginate_rest = __nccwpck_require__(9331);
+var import_plugin_rest_endpoint_methods = __nccwpck_require__(8528);
+var import_plugin_rest_endpoint_methods2 = __nccwpck_require__(8528);
 
-var core = __nccwpck_require__(8134);
-var authAction = __nccwpck_require__(20);
-var pluginPaginateRest = __nccwpck_require__(9331);
-var pluginRestEndpointMethods = __nccwpck_require__(8528);
-var httpsProxyAgent = __nccwpck_require__(6478);
+// pkg/dist-src/version.js
+var VERSION = "6.0.0";
 
-const VERSION = "5.0.5";
-
-const DEFAULTS = {
-  authStrategy: authAction.createActionAuth,
+// pkg/dist-src/index.js
+var import_https_proxy_agent = __nccwpck_require__(6478);
+var DEFAULTS = {
+  authStrategy: import_auth_action.createActionAuth,
   baseUrl: getApiBaseUrl(),
   userAgent: `octokit-action.js/${VERSION}`
 };
 function getProxyAgent() {
   const httpProxy = process.env["HTTP_PROXY"] || process.env["http_proxy"];
   if (httpProxy) {
-    return new httpsProxyAgent.HttpsProxyAgent(httpProxy);
+    return new import_https_proxy_agent.HttpsProxyAgent(httpProxy);
   }
   const httpsProxy = process.env["HTTPS_PROXY"] || process.env["https_proxy"];
   if (httpsProxy) {
-    return new httpsProxyAgent.HttpsProxyAgent(httpsProxy);
+    return new import_https_proxy_agent.HttpsProxyAgent(httpsProxy);
   }
-  return undefined;
+  return void 0;
 }
-const Octokit = core.Octokit.plugin(pluginPaginateRest.paginateRest, pluginRestEndpointMethods.legacyRestEndpointMethods).defaults(function buildDefaults(options) {
+var Octokit = import_core.Octokit.plugin(
+  import_plugin_paginate_rest.paginateRest,
+  import_plugin_rest_endpoint_methods.legacyRestEndpointMethods
+).defaults(function buildDefaults(options) {
   return {
     ...DEFAULTS,
     ...options,
@@ -5248,12 +5276,10 @@ const Octokit = core.Octokit.plugin(pluginPaginateRest.paginateRest, pluginRestE
   };
 });
 function getApiBaseUrl() {
-  /* istanbul ignore next */
   return process.env["GITHUB_API_URL"] || "https://api.github.com";
 }
-
-exports.Octokit = Octokit;
-//# sourceMappingURL=index.js.map
+// Annotate the CommonJS export names for ESM import in node:
+0 && (0);
 
 
 /***/ }),
@@ -6021,7 +6047,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "6.1.2";
+var VERSION = "7.0.0";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
