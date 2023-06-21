@@ -5240,7 +5240,7 @@ var import_plugin_paginate_rest = __nccwpck_require__(9331);
 var import_plugin_rest_endpoint_methods = __nccwpck_require__(8528);
 
 // pkg/dist-src/version.js
-var VERSION = "6.0.3";
+var VERSION = "6.0.4";
 
 // pkg/dist-src/index.js
 var import_https_proxy_agent = __nccwpck_require__(6478);
@@ -6465,7 +6465,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "7.2.3";
+var VERSION = "8.0.0";
 
 // pkg/dist-src/generated/endpoints.js
 var Endpoints = {
