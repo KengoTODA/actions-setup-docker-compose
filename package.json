@@ -1,6 +1,6 @@
 {
   "name": "@kengotoda/actions-setup-docker-compose",
-  "version": "1.1.10",
+  "version": "1.2.0",
   "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
   "private": false,
@@ -36,9 +36,9 @@
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vercel/ncc": "^0.36.0",
+    "@vercel/ncc": "^0.38.0",
     "eslint": "^8.1.0",
     "eslint-plugin-github": "^4.3.3",
     "eslint-plugin-jest": "^27.0.1",
