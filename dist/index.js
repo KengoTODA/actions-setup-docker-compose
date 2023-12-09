@@ -5236,13 +5236,13 @@ __export(dist_src_exports, {
   getProxyAgent: () => getProxyAgent
 });
 module.exports = __toCommonJS(dist_src_exports);
-var import_core = __nccwpck_require__(8134);
+var import_core = __nccwpck_require__(6762);
 var import_auth_action = __nccwpck_require__(20);
-var import_plugin_paginate_rest = __nccwpck_require__(9331);
-var import_plugin_rest_endpoint_methods = __nccwpck_require__(8528);
+var import_plugin_paginate_rest = __nccwpck_require__(4193);
+var import_plugin_rest_endpoint_methods = __nccwpck_require__(3044);
 
 // pkg/dist-src/version.js
-var VERSION = "6.0.6";
+var VERSION = "6.0.7";
 
 // pkg/dist-src/index.js
 var import_undici = __nccwpck_require__(1773);
@@ -5290,7 +5290,67 @@ function getApiBaseUrl() {
 
 /***/ }),
 
-/***/ 1793:
+/***/ 20:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// pkg/dist-src/index.js
+var dist_src_exports = {};
+__export(dist_src_exports, {
+  createActionAuth: () => createActionAuth
+});
+module.exports = __toCommonJS(dist_src_exports);
+var import_auth_token = __nccwpck_require__(334);
+var createActionAuth = function createActionAuth2() {
+  if (!process.env.GITHUB_ACTION) {
+    throw new Error(
+      "[@octokit/auth-action] `GITHUB_ACTION` environment variable is not set. @octokit/auth-action is meant to be used in GitHub Actions only."
+    );
+  }
+  const definitions = [
+    process.env.GITHUB_TOKEN,
+    process.env.INPUT_GITHUB_TOKEN,
+    process.env.INPUT_TOKEN
+  ].filter(Boolean);
+  if (definitions.length === 0) {
+    throw new Error(
+      "[@octokit/auth-action] `GITHUB_TOKEN` variable is not set. It must be set on either `env:` or `with:`. See https://github.com/octokit/auth-action.js#createactionauth"
+    );
+  }
+  if (definitions.length > 1) {
+    throw new Error(
+      "[@octokit/auth-action] The token variable is specified more than once. Use either `with.token`, `with.GITHUB_TOKEN`, or `env.GITHUB_TOKEN`. See https://github.com/octokit/auth-action.js#createactionauth"
+    );
+  }
+  const token = definitions.pop();
+  return (0, import_auth_token.createTokenAuth)(token);
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (0);
+
+
+/***/ }),
+
+/***/ 334:
 /***/ ((module) => {
 
 "use strict";
@@ -5375,7 +5435,7 @@ var createTokenAuth = function createTokenAuth2(token) {
 
 /***/ }),
 
-/***/ 8134:
+/***/ 6762:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5406,12 +5466,12 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(5030);
 var import_before_after_hook = __nccwpck_require__(3682);
-var import_request = __nccwpck_require__(6094);
-var import_graphql = __nccwpck_require__(3526);
-var import_auth_token = __nccwpck_require__(1793);
+var import_request = __nccwpck_require__(6234);
+var import_graphql = __nccwpck_require__(8467);
+var import_auth_token = __nccwpck_require__(334);
 
 // pkg/dist-src/version.js
-var VERSION = "5.0.0";
+var VERSION = "5.0.1";
 
 // pkg/dist-src/index.js
 var Octokit = class {
@@ -5544,7 +5604,7 @@ var Octokit = class {
 
 /***/ }),
 
-/***/ 3348:
+/***/ 9440:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5578,7 +5638,7 @@ module.exports = __toCommonJS(dist_src_exports);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.1";
+var VERSION = "9.0.2";
 
 // pkg/dist-src/defaults.js
 var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
@@ -5786,7 +5846,7 @@ function parseUrl(template) {
 }
 function expand(template, context) {
   var operators = ["+", "#", ".", "/", ";", "?", "&"];
-  return template.replace(
+  template = template.replace(
     /\{([^\{\}]+)\}|([^\{\}]+)/g,
     function(_, expression, literal) {
       if (expression) {
@@ -5816,6 +5876,11 @@ function expand(template, context) {
       }
     }
   );
+  if (template === "/") {
+    return template;
+  } else {
+    return template.replace(/\/$/, "");
+  }
 }
 
 // pkg/dist-src/parse.js
@@ -5908,7 +5973,7 @@ var endpoint = withDefaults(null, DEFAULTS);
 
 /***/ }),
 
-/***/ 3526:
+/***/ 8467:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5939,17 +6004,17 @@ __export(dist_src_exports, {
   withCustomRequest: () => withCustomRequest
 });
 module.exports = __toCommonJS(dist_src_exports);
-var import_request3 = __nccwpck_require__(6094);
+var import_request3 = __nccwpck_require__(6234);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "7.0.1";
+var VERSION = "7.0.2";
 
 // pkg/dist-src/with-defaults.js
-var import_request2 = __nccwpck_require__(6094);
+var import_request2 = __nccwpck_require__(6234);
 
 // pkg/dist-src/graphql.js
-var import_request = __nccwpck_require__(6094);
+var import_request = __nccwpck_require__(6234);
 
 // pkg/dist-src/error.js
 function _buildMessageForResponseErrors(data) {
@@ -6066,7 +6131,7 @@ function withCustomRequest(customRequest) {
 
 /***/ }),
 
-/***/ 9331:
+/***/ 4193:
 /***/ ((module) => {
 
 "use strict";
@@ -6100,7 +6165,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "9.0.0";
+var VERSION = "9.1.4";
 
 // pkg/dist-src/normalize-paginated-list-response.js
 function normalizePaginatedListResponse(response) {
@@ -6269,9 +6334,11 @@ var paginatingEndpoints = [
   "GET /orgs/{org}/personal-access-tokens",
   "GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories",
   "GET /orgs/{org}/projects",
+  "GET /orgs/{org}/properties/values",
   "GET /orgs/{org}/public_members",
   "GET /orgs/{org}/repos",
   "GET /orgs/{org}/rulesets",
+  "GET /orgs/{org}/rulesets/rule-suites",
   "GET /orgs/{org}/secret-scanning/alerts",
   "GET /orgs/{org}/security-advisories",
   "GET /orgs/{org}/teams",
@@ -6363,6 +6430,7 @@ var paginatingEndpoints = [
   "GET /repos/{owner}/{repo}/releases/{release_id}/reactions",
   "GET /repos/{owner}/{repo}/rules/branches/{branch}",
   "GET /repos/{owner}/{repo}/rulesets",
+  "GET /repos/{owner}/{repo}/rulesets/rule-suites",
   "GET /repos/{owner}/{repo}/secret-scanning/alerts",
   "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
   "GET /repos/{owner}/{repo}/security-advisories",
@@ -6462,7 +6530,7 @@ paginateRest.VERSION = VERSION;
 
 /***/ }),
 
-/***/ 8528:
+/***/ 3044:
 /***/ ((module) => {
 
 "use strict";
@@ -6494,7 +6562,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "10.0.0";
+var VERSION = "10.2.0";
 
 // pkg/dist-src/generated/endpoints.js
 var Endpoints = {
@@ -6598,6 +6666,9 @@ var Endpoints = {
     ],
     enableWorkflow: [
       "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+    ],
+    forceCancelWorkflowRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
     ],
     generateRunnerJitconfigForOrg: [
       "POST /orgs/{org}/actions/runners/generate-jitconfig"
@@ -7008,6 +7079,9 @@ var Endpoints = {
     addSelectedRepoToOrgSecret: [
       "PUT /orgs/{org}/codespaces/secrets/{secret_name}/repositories/{repository_id}"
     ],
+    checkPermissionsForDevcontainer: [
+      "GET /repos/{owner}/{repo}/codespaces/permissions_check"
+    ],
     codespaceMachinesForAuthenticatedUser: [
       "GET /user/codespaces/{codespace_name}/machines"
     ],
@@ -7125,7 +7199,7 @@ var Endpoints = {
       "DELETE /orgs/{org}/copilot/billing/selected_users"
     ],
     getCopilotOrganizationDetails: ["GET /orgs/{org}/copilot/billing"],
-    getCopilotSeatAssignmentDetailsForUser: [
+    getCopilotSeatDetailsForUser: [
       "GET /orgs/{org}/members/{username}/copilot"
     ],
     listCopilotSeats: ["GET /orgs/{org}/copilot/billing/seats"]
@@ -7338,7 +7412,13 @@ var Endpoints = {
     root: ["GET /"]
   },
   migrations: {
-    cancelImport: ["DELETE /repos/{owner}/{repo}/import"],
+    cancelImport: [
+      "DELETE /repos/{owner}/{repo}/import",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.cancelImport() is deprecated, see https://docs.github.com/rest/migrations/source-imports#cancel-an-import"
+      }
+    ],
     deleteArchiveForAuthenticatedUser: [
       "DELETE /user/migrations/{migration_id}/archive"
     ],
@@ -7351,9 +7431,27 @@ var Endpoints = {
     getArchiveForAuthenticatedUser: [
       "GET /user/migrations/{migration_id}/archive"
     ],
-    getCommitAuthors: ["GET /repos/{owner}/{repo}/import/authors"],
-    getImportStatus: ["GET /repos/{owner}/{repo}/import"],
-    getLargeFiles: ["GET /repos/{owner}/{repo}/import/large_files"],
+    getCommitAuthors: [
+      "GET /repos/{owner}/{repo}/import/authors",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.getCommitAuthors() is deprecated, see https://docs.github.com/rest/migrations/source-imports#get-commit-authors"
+      }
+    ],
+    getImportStatus: [
+      "GET /repos/{owner}/{repo}/import",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.getImportStatus() is deprecated, see https://docs.github.com/rest/migrations/source-imports#get-an-import-status"
+      }
+    ],
+    getLargeFiles: [
+      "GET /repos/{owner}/{repo}/import/large_files",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.getLargeFiles() is deprecated, see https://docs.github.com/rest/migrations/source-imports#get-large-files"
+      }
+    ],
     getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}"],
     getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}"],
     listForAuthenticatedUser: ["GET /user/migrations"],
@@ -7367,18 +7465,42 @@ var Endpoints = {
       {},
       { renamed: ["migrations", "listReposForAuthenticatedUser"] }
     ],
-    mapCommitAuthor: ["PATCH /repos/{owner}/{repo}/import/authors/{author_id}"],
-    setLfsPreference: ["PATCH /repos/{owner}/{repo}/import/lfs"],
+    mapCommitAuthor: [
+      "PATCH /repos/{owner}/{repo}/import/authors/{author_id}",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.mapCommitAuthor() is deprecated, see https://docs.github.com/rest/migrations/source-imports#map-a-commit-author"
+      }
+    ],
+    setLfsPreference: [
+      "PATCH /repos/{owner}/{repo}/import/lfs",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.setLfsPreference() is deprecated, see https://docs.github.com/rest/migrations/source-imports#update-git-lfs-preference"
+      }
+    ],
     startForAuthenticatedUser: ["POST /user/migrations"],
     startForOrg: ["POST /orgs/{org}/migrations"],
-    startImport: ["PUT /repos/{owner}/{repo}/import"],
+    startImport: [
+      "PUT /repos/{owner}/{repo}/import",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.startImport() is deprecated, see https://docs.github.com/rest/migrations/source-imports#start-an-import"
+      }
+    ],
     unlockRepoForAuthenticatedUser: [
       "DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock"
     ],
     unlockRepoForOrg: [
       "DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock"
     ],
-    updateImport: ["PATCH /repos/{owner}/{repo}/import"]
+    updateImport: [
+      "PATCH /repos/{owner}/{repo}/import",
+      {},
+      {
+        deprecated: "octokit.rest.migrations.updateImport() is deprecated, see https://docs.github.com/rest/migrations/source-imports#update-an-import"
+      }
+    ]
   },
   orgs: {
     addSecurityManagerTeam: [
@@ -7393,6 +7515,13 @@ var Endpoints = {
       "PUT /orgs/{org}/outside_collaborators/{username}"
     ],
     createInvitation: ["POST /orgs/{org}/invitations"],
+    createOrUpdateCustomProperties: ["PATCH /orgs/{org}/properties/schema"],
+    createOrUpdateCustomPropertiesValuesForRepos: [
+      "PATCH /orgs/{org}/properties/values"
+    ],
+    createOrUpdateCustomProperty: [
+      "PUT /orgs/{org}/properties/schema/{custom_property_name}"
+    ],
     createWebhook: ["POST /orgs/{org}/hooks"],
     delete: ["DELETE /orgs/{org}"],
     deleteWebhook: ["DELETE /orgs/{org}/hooks/{hook_id}"],
@@ -7400,6 +7529,10 @@ var Endpoints = {
       "POST /orgs/{org}/{security_product}/{enablement}"
     ],
     get: ["GET /orgs/{org}"],
+    getAllCustomProperties: ["GET /orgs/{org}/properties/schema"],
+    getCustomProperty: [
+      "GET /orgs/{org}/properties/schema/{custom_property_name}"
+    ],
     getMembershipForAuthenticatedUser: ["GET /user/memberships/orgs/{org}"],
     getMembershipForUser: ["GET /orgs/{org}/memberships/{username}"],
     getWebhook: ["GET /orgs/{org}/hooks/{hook_id}"],
@@ -7410,6 +7543,7 @@ var Endpoints = {
     list: ["GET /organizations"],
     listAppInstallations: ["GET /orgs/{org}/installations"],
     listBlockedUsers: ["GET /orgs/{org}/blocks"],
+    listCustomPropertiesValuesForRepos: ["GET /orgs/{org}/properties/values"],
     listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
     listForAuthenticatedUser: ["GET /user/orgs"],
     listForUser: ["GET /users/{username}/orgs"],
@@ -7433,6 +7567,9 @@ var Endpoints = {
     pingWebhook: ["POST /orgs/{org}/hooks/{hook_id}/pings"],
     redeliverWebhookDelivery: [
       "POST /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+    ],
+    removeCustomProperty: [
+      "DELETE /orgs/{org}/properties/schema/{custom_property_name}"
     ],
     removeMember: ["DELETE /orgs/{org}/members/{username}"],
     removeMembershipForUser: ["DELETE /orgs/{org}/memberships/{username}"],
@@ -7914,6 +8051,7 @@ var Endpoints = {
     getCustomDeploymentProtectionRule: [
       "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
     ],
+    getCustomPropertiesValues: ["GET /repos/{owner}/{repo}/properties/values"],
     getDeployKey: ["GET /repos/{owner}/{repo}/keys/{key_id}"],
     getDeployment: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}"],
     getDeploymentBranchPolicy: [
@@ -7927,6 +8065,8 @@ var Endpoints = {
     ],
     getLatestPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/latest"],
     getLatestRelease: ["GET /repos/{owner}/{repo}/releases/latest"],
+    getOrgRuleSuite: ["GET /orgs/{org}/rulesets/rule-suites/{rule_suite_id}"],
+    getOrgRuleSuites: ["GET /orgs/{org}/rulesets/rule-suites"],
     getOrgRuleset: ["GET /orgs/{org}/rulesets/{ruleset_id}"],
     getOrgRulesets: ["GET /orgs/{org}/rulesets"],
     getPages: ["GET /repos/{owner}/{repo}/pages"],
@@ -7942,6 +8082,10 @@ var Endpoints = {
     getRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}"],
     getReleaseAsset: ["GET /repos/{owner}/{repo}/releases/assets/{asset_id}"],
     getReleaseByTag: ["GET /repos/{owner}/{repo}/releases/tags/{tag}"],
+    getRepoRuleSuite: [
+      "GET /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
+    ],
+    getRepoRuleSuites: ["GET /repos/{owner}/{repo}/rulesets/rule-suites"],
     getRepoRuleset: ["GET /repos/{owner}/{repo}/rulesets/{ruleset_id}"],
     getRepoRulesets: ["GET /repos/{owner}/{repo}/rulesets"],
     getStatusChecksProtection: [
@@ -8377,11 +8521,41 @@ for (const [scope, endpoints] of Object.entries(endpoints_default)) {
   }
 }
 var handler = {
+  has({ scope }, methodName) {
+    return endpointMethodsMap.get(scope).has(methodName);
+  },
+  getOwnPropertyDescriptor(target, methodName) {
+    return {
+      value: this.get(target, methodName),
+      // ensures method is in the cache
+      configurable: true,
+      writable: true,
+      enumerable: true
+    };
+  },
+  defineProperty(target, methodName, descriptor) {
+    Object.defineProperty(target.cache, methodName, descriptor);
+    return true;
+  },
+  deleteProperty(target, methodName) {
+    delete target.cache[methodName];
+    return true;
+  },
+  ownKeys({ scope }) {
+    return [...endpointMethodsMap.get(scope).keys()];
+  },
+  set(target, methodName, value) {
+    return target.cache[methodName] = value;
+  },
   get({ octokit, scope, cache }, methodName) {
     if (cache[methodName]) {
       return cache[methodName];
     }
-    const { decorations, endpointDefaults } = endpointMethodsMap.get(scope).get(methodName);
+    const method = endpointMethodsMap.get(scope).get(methodName);
+    if (!method) {
+      return void 0;
+    }
+    const { endpointDefaults, decorations } = method;
     if (decorations) {
       cache[methodName] = decorate(
         octokit,
@@ -8467,7 +8641,7 @@ legacyRestEndpointMethods.VERSION = VERSION;
 
 /***/ }),
 
-/***/ 5203:
+/***/ 537:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -8565,7 +8739,7 @@ var RequestError = class extends Error {
 
 /***/ }),
 
-/***/ 6094:
+/***/ 6234:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -8594,15 +8768,15 @@ __export(dist_src_exports, {
   request: () => request
 });
 module.exports = __toCommonJS(dist_src_exports);
-var import_endpoint = __nccwpck_require__(3348);
+var import_endpoint = __nccwpck_require__(9440);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "8.1.2";
+var VERSION = "8.1.5";
 
 // pkg/dist-src/fetch-wrapper.js
 var import_is_plain_object = __nccwpck_require__(3287);
-var import_request_error = __nccwpck_require__(5203);
+var import_request_error = __nccwpck_require__(537);
 
 // pkg/dist-src/get-buffer-response.js
 function getBufferResponse(response) {
@@ -8704,7 +8878,15 @@ function fetchWrapper(requestOptions) {
       throw error;
     else if (error.name === "AbortError")
       throw error;
-    throw new import_request_error.RequestError(error.message, 500, {
+    let message = error.message;
+    if (error.name === "TypeError" && "cause" in error) {
+      if (error.cause instanceof Error) {
+        message = error.cause.message;
+      } else if (typeof error.cause === "string") {
+        message = error.cause;
+      }
+    }
+    throw new import_request_error.RequestError(message, 500, {
       request: requestOptions
     });
   });
@@ -8712,7 +8894,7 @@ function fetchWrapper(requestOptions) {
 async function getResponseData(response) {
   const contentType = response.headers.get("content-type");
   if (/application\/json/.test(contentType)) {
-    return response.json();
+    return response.json().catch(() => response.text()).catch(() => "");
   }
   if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
     return response.text();
@@ -8762,151 +8944,6 @@ var request = withDefaults(import_endpoint.endpoint, {
     "user-agent": `octokit-request.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`
   }
 });
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
-
-
-/***/ }),
-
-/***/ 20:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  createActionAuth: () => createActionAuth
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_auth_token = __nccwpck_require__(6434);
-var createActionAuth = function createActionAuth2() {
-  if (!process.env.GITHUB_ACTION) {
-    throw new Error(
-      "[@octokit/auth-action] `GITHUB_ACTION` environment variable is not set. @octokit/auth-action is meant to be used in GitHub Actions only."
-    );
-  }
-  const definitions = [
-    process.env.GITHUB_TOKEN,
-    process.env.INPUT_GITHUB_TOKEN,
-    process.env.INPUT_TOKEN
-  ].filter(Boolean);
-  if (definitions.length === 0) {
-    throw new Error(
-      "[@octokit/auth-action] `GITHUB_TOKEN` variable is not set. It must be set on either `env:` or `with:`. See https://github.com/octokit/auth-action.js#createactionauth"
-    );
-  }
-  if (definitions.length > 1) {
-    throw new Error(
-      "[@octokit/auth-action] The token variable is specified more than once. Use either `with.token`, `with.GITHUB_TOKEN`, or `env.GITHUB_TOKEN`. See https://github.com/octokit/auth-action.js#createactionauth"
-    );
-  }
-  const token = definitions.pop();
-  return (0, import_auth_token.createTokenAuth)(token);
-};
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
-
-
-/***/ }),
-
-/***/ 6434:
-/***/ ((module) => {
-
-"use strict";
-
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  createTokenAuth: () => createTokenAuth
-});
-module.exports = __toCommonJS(dist_src_exports);
-
-// pkg/dist-src/auth.js
-var REGEX_IS_INSTALLATION_LEGACY = /^v1\./;
-var REGEX_IS_INSTALLATION = /^ghs_/;
-var REGEX_IS_USER_TO_SERVER = /^ghu_/;
-async function auth(token) {
-  const isApp = token.split(/\./).length === 3;
-  const isInstallation = REGEX_IS_INSTALLATION_LEGACY.test(token) || REGEX_IS_INSTALLATION.test(token);
-  const isUserToServer = REGEX_IS_USER_TO_SERVER.test(token);
-  const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
-  return {
-    type: "token",
-    token,
-    tokenType
-  };
-}
-
-// pkg/dist-src/with-authorization-prefix.js
-function withAuthorizationPrefix(token) {
-  if (token.split(/\./).length === 3) {
-    return `bearer ${token}`;
-  }
-  return `token ${token}`;
-}
-
-// pkg/dist-src/hook.js
-async function hook(token, request, route, parameters) {
-  const endpoint = request.endpoint.merge(
-    route,
-    parameters
-  );
-  endpoint.headers.authorization = withAuthorizationPrefix(token);
-  return request(endpoint);
-}
-
-// pkg/dist-src/index.js
-var createTokenAuth = function createTokenAuth2(token) {
-  if (!token) {
-    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
-  }
-  if (typeof token !== "string") {
-    throw new Error(
-      "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
-    );
-  }
-  token = token.replace(/^(token|bearer) +/i, "");
-  return Object.assign(auth.bind(null, token), {
-    hook: hook.bind(null, token)
-  });
-};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
 
@@ -11164,6 +11201,7 @@ const MockAgent = __nccwpck_require__(6771)
 const MockPool = __nccwpck_require__(6193)
 const mockErrors = __nccwpck_require__(888)
 const ProxyAgent = __nccwpck_require__(7858)
+const RetryHandler = __nccwpck_require__(2286)
 const { getGlobalDispatcher, setGlobalDispatcher } = __nccwpck_require__(1892)
 const DecoratorHandler = __nccwpck_require__(6930)
 const RedirectHandler = __nccwpck_require__(2860)
@@ -11185,6 +11223,7 @@ module.exports.Pool = Pool
 module.exports.BalancedPool = BalancedPool
 module.exports.Agent = Agent
 module.exports.ProxyAgent = ProxyAgent
+module.exports.RetryHandler = RetryHandler
 
 module.exports.DecoratorHandler = DecoratorHandler
 module.exports.RedirectHandler = RedirectHandler
@@ -11245,58 +11284,54 @@ function makeDispatcher (fn) {
 module.exports.setGlobalDispatcher = setGlobalDispatcher
 module.exports.getGlobalDispatcher = getGlobalDispatcher
 
-if (util.nodeMajor > 16 || (util.nodeMajor === 16 && util.nodeMinor >= 8)) {
-  let fetchImpl = null
-  module.exports.fetch = async function fetch (resource) {
-    if (!fetchImpl) {
-      fetchImpl = (__nccwpck_require__(4881).fetch)
-    }
-
-    try {
-      return await fetchImpl(...arguments)
-    } catch (err) {
-      if (typeof err === 'object') {
-        Error.captureStackTrace(err, this)
-      }
-
-      throw err
-    }
+let fetchImpl = null
+module.exports.fetch = async function fetch (resource) {
+  if (!fetchImpl) {
+    fetchImpl = (__nccwpck_require__(4881).fetch)
   }
-  module.exports.Headers = __nccwpck_require__(554).Headers
-  module.exports.Response = __nccwpck_require__(7823).Response
-  module.exports.Request = __nccwpck_require__(8359).Request
-  module.exports.FormData = __nccwpck_require__(2015).FormData
-  module.exports.File = __nccwpck_require__(8511).File
-  module.exports.FileReader = __nccwpck_require__(1446).FileReader
 
-  const { setGlobalOrigin, getGlobalOrigin } = __nccwpck_require__(1246)
+  try {
+    return await fetchImpl(...arguments)
+  } catch (err) {
+    if (typeof err === 'object') {
+      Error.captureStackTrace(err, this)
+    }
 
-  module.exports.setGlobalOrigin = setGlobalOrigin
-  module.exports.getGlobalOrigin = getGlobalOrigin
-
-  const { CacheStorage } = __nccwpck_require__(7907)
-  const { kConstruct } = __nccwpck_require__(9174)
-
-  // Cache & CacheStorage are tightly coupled with fetch. Even if it may run
-  // in an older version of Node, it doesn't have any use without fetch.
-  module.exports.caches = new CacheStorage(kConstruct)
+    throw err
+  }
 }
+module.exports.Headers = __nccwpck_require__(554).Headers
+module.exports.Response = __nccwpck_require__(7823).Response
+module.exports.Request = __nccwpck_require__(8359).Request
+module.exports.FormData = __nccwpck_require__(2015).FormData
+module.exports.File = __nccwpck_require__(8511).File
+module.exports.FileReader = __nccwpck_require__(1446).FileReader
 
-if (util.nodeMajor >= 16) {
-  const { deleteCookie, getCookies, getSetCookies, setCookie } = __nccwpck_require__(1724)
+const { setGlobalOrigin, getGlobalOrigin } = __nccwpck_require__(1246)
 
-  module.exports.deleteCookie = deleteCookie
-  module.exports.getCookies = getCookies
-  module.exports.getSetCookies = getSetCookies
-  module.exports.setCookie = setCookie
+module.exports.setGlobalOrigin = setGlobalOrigin
+module.exports.getGlobalOrigin = getGlobalOrigin
 
-  const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(685)
+const { CacheStorage } = __nccwpck_require__(7907)
+const { kConstruct } = __nccwpck_require__(9174)
 
-  module.exports.parseMIMEType = parseMIMEType
-  module.exports.serializeAMimeType = serializeAMimeType
-}
+// Cache & CacheStorage are tightly coupled with fetch. Even if it may run
+// in an older version of Node, it doesn't have any use without fetch.
+module.exports.caches = new CacheStorage(kConstruct)
 
-if (util.nodeMajor >= 18 && hasCrypto) {
+const { deleteCookie, getCookies, getSetCookies, setCookie } = __nccwpck_require__(1724)
+
+module.exports.deleteCookie = deleteCookie
+module.exports.getCookies = getCookies
+module.exports.getSetCookies = getSetCookies
+module.exports.setCookie = setCookie
+
+const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(685)
+
+module.exports.parseMIMEType = parseMIMEType
+module.exports.serializeAMimeType = serializeAMimeType
+
+if (hasCrypto) {
   const { WebSocket } = __nccwpck_require__(4284)
 
   module.exports.WebSocket = WebSocket
@@ -12085,6 +12120,7 @@ function request (opts, callback) {
 }
 
 module.exports = request
+module.exports.RequestHandler = RequestHandler
 
 
 /***/ }),
@@ -12467,6 +12503,8 @@ const kBody = Symbol('kBody')
 const kAbort = Symbol('abort')
 const kContentType = Symbol('kContentType')
 
+const noop = () => {}
+
 module.exports = class BodyReadable extends Readable {
   constructor ({
     resume,
@@ -12600,37 +12638,50 @@ module.exports = class BodyReadable extends Readable {
     return this[kBody]
   }
 
-  async dump (opts) {
+  dump (opts) {
     let limit = opts && Number.isFinite(opts.limit) ? opts.limit : 262144
     const signal = opts && opts.signal
-    const abortFn = () => {
-      this.destroy()
-    }
-    let signalListenerCleanup
+
     if (signal) {
-      if (typeof signal !== 'object' || !('aborted' in signal)) {
-        throw new InvalidArgumentError('signal must be an AbortSignal')
-      }
-      util.throwIfAborted(signal)
-      signalListenerCleanup = util.addAbortListener(signal, abortFn)
-    }
-    try {
-      for await (const chunk of this) {
-        util.throwIfAborted(signal)
-        limit -= Buffer.byteLength(chunk)
-        if (limit < 0) {
-          return
+      try {
+        if (typeof signal !== 'object' || !('aborted' in signal)) {
+          throw new InvalidArgumentError('signal must be an AbortSignal')
         }
-      }
-    } catch {
-      util.throwIfAborted(signal)
-    } finally {
-      if (typeof signalListenerCleanup === 'function') {
-        signalListenerCleanup()
-      } else if (signalListenerCleanup) {
-        signalListenerCleanup[Symbol.dispose]()
+        util.throwIfAborted(signal)
+      } catch (err) {
+        return Promise.reject(err)
       }
     }
+
+    if (this.closed) {
+      return Promise.resolve(null)
+    }
+
+    return new Promise((resolve, reject) => {
+      const signalListenerCleanup = signal
+        ? util.addAbortListener(signal, () => {
+          this.destroy()
+        })
+        : noop
+
+      this
+        .on('close', function () {
+          signalListenerCleanup()
+          if (signal && signal.aborted) {
+            reject(signal.reason || Object.assign(new Error('The operation was aborted'), { name: 'AbortError' }))
+          } else {
+            resolve(null)
+          }
+        })
+        .on('error', noop)
+        .on('data', function (chunk) {
+          limit -= chunk.length
+          if (limit <= 0) {
+            this.destroy()
+          }
+        })
+        .resume()
+    })
   }
 }
 
@@ -14010,13 +14061,13 @@ module.exports = {
 /***/ }),
 
 /***/ 9174:
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 module.exports = {
-  kConstruct: Symbol('constructable')
+  kConstruct: (__nccwpck_require__(2785).kConstruct)
 }
 
 
@@ -14334,7 +14385,7 @@ class Client extends DispatcherBase {
     }
 
     if (maxConcurrentStreams != null && (typeof maxConcurrentStreams !== 'number' || maxConcurrentStreams < 1)) {
-      throw new InvalidArgumentError('maxConcurrentStreams must be a possitive integer, greater than 0')
+      throw new InvalidArgumentError('maxConcurrentStreams must be a positive integer, greater than 0')
     }
 
     if (typeof connect !== 'function') {
@@ -14381,7 +14432,7 @@ class Client extends DispatcherBase {
       ? null
       : {
         // streams: null, // Fixed queue of streams - For future support of `push`
-          openStreams: 0, // Keep track of them to decide wether or not unref the session
+          openStreams: 0, // Keep track of them to decide whether or not unref the session
           maxConcurrentStreams: maxConcurrentStreams != null ? maxConcurrentStreams : 100 // Max peerConcurrentStreams for a Node h2 server
         }
     this[kHost] = `${this[kUrl].hostname}${this[kUrl].port ? `:${this[kUrl].port}` : ''}`
@@ -15002,11 +15053,9 @@ class Parser {
       socket[kReset] = true
     }
 
-    let pause
-    try {
-      pause = request.onHeaders(statusCode, headers, this.resume, statusText) === false
-    } catch (err) {
-      util.destroy(socket, err)
+    const pause = request.onHeaders(statusCode, headers, this.resume, statusText) === false
+
+    if (request.aborted) {
       return -1
     }
 
@@ -15053,13 +15102,8 @@ class Parser {
 
     this.bytesRead += buf.length
 
-    try {
-      if (request.onData(buf) === false) {
-        return constants.ERROR.PAUSED
-      }
-    } catch (err) {
-      util.destroy(socket, err)
-      return -1
+    if (request.onData(buf) === false) {
+      return constants.ERROR.PAUSED
     }
   }
 
@@ -15100,11 +15144,7 @@ class Parser {
       return -1
     }
 
-    try {
-      request.onComplete(headers)
-    } catch (err) {
-      errorRequest(client, request, err)
-    }
+    request.onComplete(headers)
 
     client[kQueue][client[kRunningIdx]++] = null
 
@@ -15268,7 +15308,7 @@ async function connect (client) {
     const idx = hostname.indexOf(']')
 
     assert(idx !== -1)
-    const ip = hostname.substr(1, idx - 1)
+    const ip = hostname.substring(1, idx)
 
     assert(net.isIP(ip))
     hostname = ip
@@ -15767,6 +15807,7 @@ function writeH2 (client, session, request) {
     return false
   }
 
+  /** @type {import('node:http2').ClientHttp2Stream} */
   let stream
   const h2State = client[kHTTP2SessionState]
 
@@ -15801,7 +15842,7 @@ function writeH2 (client, session, request) {
   }
 
   // https://tools.ietf.org/html/rfc7540#section-8.3
-  // :path and :scheme headers must be omited when sending CONNECT
+  // :path and :scheme headers must be omitted when sending CONNECT
 
   headers[HTTP2_HEADER_PATH] = path
   headers[HTTP2_HEADER_SCHEME] = 'https'
@@ -15862,14 +15903,10 @@ function writeH2 (client, session, request) {
   const shouldEndStream = method === 'GET' || method === 'HEAD'
   if (expectContinue) {
     headers[HTTP2_HEADER_EXPECT] = '100-continue'
-    /**
-     * @type {import('node:http2').ClientHttp2Stream}
-     */
     stream = session.request(headers, { endStream: shouldEndStream, signal })
 
     stream.once('continue', writeBodyH2)
   } else {
-    /** @type {import('node:http2').ClientHttp2Stream} */
     stream = session.request(headers, {
       endStream: shouldEndStream,
       signal
@@ -15881,7 +15918,9 @@ function writeH2 (client, session, request) {
   ++h2State.openStreams
 
   stream.once('response', headers => {
-    if (request.onHeaders(Number(headers[HTTP2_HEADER_STATUS]), headers, stream.resume.bind(stream), '') === false) {
+    const { [HTTP2_HEADER_STATUS]: statusCode, ...realHeaders } = headers
+
+    if (request.onHeaders(Number(statusCode), realHeaders, stream.resume.bind(stream), '') === false) {
       stream.pause()
     }
   })
@@ -15891,13 +15930,17 @@ function writeH2 (client, session, request) {
   })
 
   stream.on('data', (chunk) => {
-    if (request.onData(chunk) === false) stream.pause()
+    if (request.onData(chunk) === false) {
+      stream.pause()
+    }
   })
 
   stream.once('close', () => {
     h2State.openStreams -= 1
     // TODO(HTTP/2): unref only if current streams count is 0
-    if (h2State.openStreams === 0) session.unref()
+    if (h2State.openStreams === 0) {
+      session.unref()
+    }
   })
 
   stream.once('error', function (err) {
@@ -15926,7 +15969,7 @@ function writeH2 (client, session, request) {
   // })
 
   // stream.on('push', headers => {
-  //   // TODO(HTTP/2): Suppor push
+  //   // TODO(HTTP/2): Support push
   // })
 
   // stream.on('trailers', headers => {
@@ -16057,7 +16100,11 @@ function writeStream ({ h2stream, body, client, request, socket, contentLength, 
     }
   }
   const onAbort = function () {
-    onFinished(new RequestAbortedError())
+    if (finished) {
+      return
+    }
+    const err = new RequestAbortedError()
+    queueMicrotask(() => onFinished(err))
   }
   const onFinished = function (err) {
     if (finished) {
@@ -16380,8 +16427,6 @@ module.exports = Client
 "use strict";
 
 
-/* istanbul ignore file: only for Node 12 */
-
 const { kConnected, kSize } = __nccwpck_require__(2785)
 
 class CompatWeakRef {
@@ -16421,10 +16466,7 @@ module.exports = function () {
       FinalizationRegistry: CompatFinalizer
     }
   }
-  return {
-    WeakRef: global.WeakRef || CompatWeakRef,
-    FinalizationRegistry: global.FinalizationRegistry || CompatFinalizer
-  }
+  return { WeakRef, FinalizationRegistry }
 }
 
 
@@ -17455,10 +17497,137 @@ function setupTimeout (onConnectTimeout, timeout) {
 }
 
 function onConnectTimeout (socket) {
-  util.destroy(socket, new ConnectTimeoutError())
+  let message = 'Connect Timeout Error'
+  if (Array.isArray(socket.autoSelectFamilyAttemptedAddresses)) {
+    message = +` (attempted addresses: ${socket.autoSelectFamilyAttemptedAddresses.join(', ')})`
+  }
+  util.destroy(socket, new ConnectTimeoutError(message))
 }
 
 module.exports = buildConnector
+
+
+/***/ }),
+
+/***/ 4462:
+/***/ ((module) => {
+
+/** @type {Record<string, string | undefined>} */
+const headerNameLowerCasedRecord = {}
+
+// https://developer.mozilla.org/docs/Web/HTTP/Headers
+const wellknownHeaderNames = [
+  'Accept',
+  'Accept-Encoding',
+  'Accept-Language',
+  'Accept-Ranges',
+  'Access-Control-Allow-Credentials',
+  'Access-Control-Allow-Headers',
+  'Access-Control-Allow-Methods',
+  'Access-Control-Allow-Origin',
+  'Access-Control-Expose-Headers',
+  'Access-Control-Max-Age',
+  'Access-Control-Request-Headers',
+  'Access-Control-Request-Method',
+  'Age',
+  'Allow',
+  'Alt-Svc',
+  'Alt-Used',
+  'Authorization',
+  'Cache-Control',
+  'Clear-Site-Data',
+  'Connection',
+  'Content-Disposition',
+  'Content-Encoding',
+  'Content-Language',
+  'Content-Length',
+  'Content-Location',
+  'Content-Range',
+  'Content-Security-Policy',
+  'Content-Security-Policy-Report-Only',
+  'Content-Type',
+  'Cookie',
+  'Cross-Origin-Embedder-Policy',
+  'Cross-Origin-Opener-Policy',
+  'Cross-Origin-Resource-Policy',
+  'Date',
+  'Device-Memory',
+  'Downlink',
+  'ECT',
+  'ETag',
+  'Expect',
+  'Expect-CT',
+  'Expires',
+  'Forwarded',
+  'From',
+  'Host',
+  'If-Match',
+  'If-Modified-Since',
+  'If-None-Match',
+  'If-Range',
+  'If-Unmodified-Since',
+  'Keep-Alive',
+  'Last-Modified',
+  'Link',
+  'Location',
+  'Max-Forwards',
+  'Origin',
+  'Permissions-Policy',
+  'Pragma',
+  'Proxy-Authenticate',
+  'Proxy-Authorization',
+  'RTT',
+  'Range',
+  'Referer',
+  'Referrer-Policy',
+  'Refresh',
+  'Retry-After',
+  'Sec-WebSocket-Accept',
+  'Sec-WebSocket-Extensions',
+  'Sec-WebSocket-Key',
+  'Sec-WebSocket-Protocol',
+  'Sec-WebSocket-Version',
+  'Server',
+  'Server-Timing',
+  'Service-Worker-Allowed',
+  'Service-Worker-Navigation-Preload',
+  'Set-Cookie',
+  'SourceMap',
+  'Strict-Transport-Security',
+  'Supports-Loading-Mode',
+  'TE',
+  'Timing-Allow-Origin',
+  'Trailer',
+  'Transfer-Encoding',
+  'Upgrade',
+  'Upgrade-Insecure-Requests',
+  'User-Agent',
+  'Vary',
+  'Via',
+  'WWW-Authenticate',
+  'X-Content-Type-Options',
+  'X-DNS-Prefetch-Control',
+  'X-Frame-Options',
+  'X-Permitted-Cross-Domain-Policies',
+  'X-Powered-By',
+  'X-Requested-With',
+  'X-XSS-Protection'
+]
+
+for (let i = 0; i < wellknownHeaderNames.length; ++i) {
+  const key = wellknownHeaderNames[i]
+  const lowerCasedKey = key.toLowerCase()
+  headerNameLowerCasedRecord[key] = headerNameLowerCasedRecord[lowerCasedKey] =
+    lowerCasedKey
+}
+
+// Note: object prototypes should not be able to be referenced. e.g. `Object#hasOwnProperty`.
+Object.setPrototypeOf(headerNameLowerCasedRecord, null)
+
+module.exports = {
+  wellknownHeaderNames,
+  headerNameLowerCasedRecord
+}
 
 
 /***/ }),
@@ -17662,6 +17831,19 @@ class ResponseExceededMaxSizeError extends UndiciError {
   }
 }
 
+class RequestRetryError extends UndiciError {
+  constructor (message, code, { headers, data }) {
+    super(message)
+    Error.captureStackTrace(this, RequestRetryError)
+    this.name = 'RequestRetryError'
+    this.message = message || 'Request retry error'
+    this.code = 'UND_ERR_REQ_RETRY'
+    this.statusCode = code
+    this.data = data
+    this.headers = headers
+  }
+}
+
 module.exports = {
   HTTPParserError,
   UndiciError,
@@ -17681,7 +17863,8 @@ module.exports = {
   NotSupportedError,
   ResponseContentLengthMismatchError,
   BalancedPoolMissingUpstreamError,
-  ResponseExceededMaxSizeError
+  ResponseExceededMaxSizeError,
+  RequestRetryError
 }
 
 
@@ -17889,10 +18072,6 @@ class Request {
     }
 
     if (util.isFormDataLike(this.body)) {
-      if (util.nodeMajor < 16 || (util.nodeMajor === 16 && util.nodeMinor < 8)) {
-        throw new InvalidArgumentError('Form-Data bodies are only supported in node v16.8 and newer.')
-      }
-
       if (!extractBody) {
         extractBody = (__nccwpck_require__(9990).extractBody)
       }
@@ -17923,9 +18102,9 @@ class Request {
   onBodySent (chunk) {
     if (this[kHandler].onBodySent) {
       try {
-        this[kHandler].onBodySent(chunk)
+        return this[kHandler].onBodySent(chunk)
       } catch (err) {
-        this.onError(err)
+        this.abort(err)
       }
     }
   }
@@ -17937,9 +18116,9 @@ class Request {
 
     if (this[kHandler].onRequestSent) {
       try {
-        this[kHandler].onRequestSent()
+        return this[kHandler].onRequestSent()
       } catch (err) {
-        this.onError(err)
+        this.abort(err)
       }
     }
   }
@@ -17964,14 +18143,23 @@ class Request {
       channels.headers.publish({ request: this, response: { statusCode, headers, statusText } })
     }
 
-    return this[kHandler].onHeaders(statusCode, headers, resume, statusText)
+    try {
+      return this[kHandler].onHeaders(statusCode, headers, resume, statusText)
+    } catch (err) {
+      this.abort(err)
+    }
   }
 
   onData (chunk) {
     assert(!this.aborted)
     assert(!this.completed)
 
-    return this[kHandler].onData(chunk)
+    try {
+      return this[kHandler].onData(chunk)
+    } catch (err) {
+      this.abort(err)
+      return false
+    }
   }
 
   onUpgrade (statusCode, headers, socket) {
@@ -17990,7 +18178,13 @@ class Request {
     if (channels.trailers.hasSubscribers) {
       channels.trailers.publish({ request: this, trailers })
     }
-    return this[kHandler].onComplete(trailers)
+
+    try {
+      return this[kHandler].onComplete(trailers)
+    } catch (err) {
+      // TODO (fix): This might be a bad idea?
+      this.onError(err)
+    }
   }
 
   onError (error) {
@@ -18004,6 +18198,7 @@ class Request {
       return
     }
     this.aborted = true
+
     return this[kHandler].onError(error)
   }
 
@@ -18240,7 +18435,9 @@ module.exports = {
   kHTTP2BuildRequest: Symbol('http2 build request'),
   kHTTP1BuildRequest: Symbol('http1 build request'),
   kHTTP2CopyHeaders: Symbol('http2 copy headers'),
-  kHTTPConnVersion: Symbol('http connection version')
+  kHTTPConnVersion: Symbol('http connection version'),
+  kRetryHandlerDefaultRetry: Symbol('retry agent default retry'),
+  kConstruct: Symbol('constructable')
 }
 
 
@@ -18261,6 +18458,7 @@ const { InvalidArgumentError } = __nccwpck_require__(8045)
 const { Blob } = __nccwpck_require__(4300)
 const nodeUtil = __nccwpck_require__(3837)
 const { stringify } = __nccwpck_require__(3477)
+const { headerNameLowerCasedRecord } = __nccwpck_require__(4462)
 
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(v => Number(v))
 
@@ -18377,13 +18575,13 @@ function getHostname (host) {
     const idx = host.indexOf(']')
 
     assert(idx !== -1)
-    return host.substr(1, idx - 1)
+    return host.substring(1, idx)
   }
 
   const idx = host.indexOf(':')
   if (idx === -1) return host
 
-  return host.substr(0, idx)
+  return host.substring(0, idx)
 }
 
 // IP addresses are not valid server names per RFC6066
@@ -18475,19 +18673,21 @@ function parseHeaders (headers, obj = {}) {
   if (!Array.isArray(headers)) return headers
 
   for (let i = 0; i < headers.length; i += 2) {
-    const key = headers[i].toString().toLowerCase()
-    let val = obj[key]
+    const key = headers[i].toString()
+    const lowerCasedKey = headerNameLowerCasedRecord[key] ?? key.toLowerCase()
+    let val = obj[lowerCasedKey]
 
     if (!val) {
-      if (Array.isArray(headers[i + 1])) {
-        obj[key] = headers[i + 1]
+      const headersValue = headers[i + 1]
+      if (typeof headersValue === 'string') {
+        obj[lowerCasedKey] = headersValue
       } else {
-        obj[key] = headers[i + 1].toString('utf8')
+        obj[lowerCasedKey] = Array.isArray(headersValue) ? headersValue.map(x => x.toString('utf8')) : headersValue.toString('utf8')
       }
     } else {
       if (!Array.isArray(val)) {
         val = [val]
-        obj[key] = val
+        obj[lowerCasedKey] = val
       }
       val.push(headers[i + 1].toString('utf8'))
     }
@@ -18611,21 +18811,9 @@ function getSocketInfo (socket) {
   }
 }
 
-async function * convertIterableToBuffer (iterable) {
-  for await (const chunk of iterable) {
-    yield Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
-  }
-}
-
-let ReadableStream
+/** @type {globalThis['ReadableStream']} */
 function ReadableStreamFrom (iterable) {
-  if (!ReadableStream) {
-    ReadableStream = (__nccwpck_require__(5356).ReadableStream)
-  }
-
-  if (ReadableStream.from) {
-    return ReadableStream.from(convertIterableToBuffer(iterable))
-  }
+  // We cannot use ReadableStream.from here because it does not return a byte stream.
 
   let iterator
   return new ReadableStream(
@@ -18638,18 +18826,21 @@ function ReadableStreamFrom (iterable) {
         if (done) {
           queueMicrotask(() => {
             controller.close()
+            controller.byobRequest?.respond(0)
           })
         } else {
           const buf = Buffer.isBuffer(value) ? value : Buffer.from(value)
-          controller.enqueue(new Uint8Array(buf))
+          if (buf.byteLength) {
+            controller.enqueue(new Uint8Array(buf))
+          }
         }
         return controller.desiredSize > 0
       },
       async cancel (reason) {
         await iterator.return()
-      }
-    },
-    0
+      },
+      type: 'bytes'
+    }
   )
 }
 
@@ -18683,16 +18874,7 @@ function throwIfAborted (signal) {
   }
 }
 
-let events
 function addAbortListener (signal, listener) {
-  if (typeof Symbol.dispose === 'symbol') {
-    if (!events) {
-      events = __nccwpck_require__(2361)
-    }
-    if (typeof events.addAbortListener === 'function' && 'aborted' in signal) {
-      return events.addAbortListener(signal, listener)
-    }
-  }
   if ('addEventListener' in signal) {
     signal.addEventListener('abort', listener, { once: true })
     return () => signal.removeEventListener('abort', listener)
@@ -18714,6 +18896,21 @@ function toUSVString (val) {
   }
 
   return `${val}`
+}
+
+// Parsed accordingly to RFC 9110
+// https://www.rfc-editor.org/rfc/rfc9110#field.content-range
+function parseRangeHeader (range) {
+  if (range == null || range === '') return { start: 0, end: null, size: null }
+
+  const m = range ? range.match(/^bytes (\d+)-(\d+)\/(\d+)?$/) : null
+  return m
+    ? {
+        start: parseInt(m[1]),
+        end: m[2] ? parseInt(m[2]) : null,
+        size: m[3] ? parseInt(m[3]) : null
+      }
+    : null
 }
 
 const kEnumerableProperty = Object.create(null)
@@ -18749,9 +18946,11 @@ module.exports = {
   buildURL,
   throwIfAborted,
   addAbortListener,
+  parseRangeHeader,
   nodeMajor,
   nodeMinor,
-  nodeHasAutoSelectFamily: nodeMajor > 18 || (nodeMajor === 18 && nodeMinor >= 13)
+  nodeHasAutoSelectFamily: nodeMajor > 18 || (nodeMajor === 18 && nodeMinor >= 13),
+  safeHTTPMethods: ['GET', 'HEAD', 'OPTIONS', 'TRACE']
 }
 
 
@@ -19003,7 +19202,6 @@ const {
 const { FormData } = __nccwpck_require__(2015)
 const { kState } = __nccwpck_require__(5861)
 const { webidl } = __nccwpck_require__(1744)
-const { DOMException, structuredClone } = __nccwpck_require__(1037)
 const { Blob, File: NativeFile } = __nccwpck_require__(4300)
 const { kBodyUsed } = __nccwpck_require__(2785)
 const assert = __nccwpck_require__(9491)
@@ -19012,8 +19210,6 @@ const { isUint8Array, isArrayBuffer } = __nccwpck_require__(9830)
 const { File: UndiciFile } = __nccwpck_require__(8511)
 const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(685)
 
-let ReadableStream = globalThis.ReadableStream
-
 /** @type {globalThis['File']} */
 const File = NativeFile ?? UndiciFile
 const textEncoder = new TextEncoder()
@@ -19021,10 +19217,6 @@ const textDecoder = new TextDecoder()
 
 // https://fetch.spec.whatwg.org/#concept-bodyinit-extract
 function extractBody (object, keepalive = false) {
-  if (!ReadableStream) {
-    ReadableStream = (__nccwpck_require__(5356).ReadableStream)
-  }
-
   // 1. Let stream be null.
   let stream = null
 
@@ -19037,16 +19229,19 @@ function extractBody (object, keepalive = false) {
     stream = object.stream()
   } else {
     // 4. Otherwise, set stream to a new ReadableStream object, and set
-    //    up stream.
+    //    up stream with byte reading support.
     stream = new ReadableStream({
       async pull (controller) {
-        controller.enqueue(
-          typeof source === 'string' ? textEncoder.encode(source) : source
-        )
+        const buffer = typeof source === 'string' ? textEncoder.encode(source) : source
+
+        if (buffer.byteLength) {
+          controller.enqueue(buffer)
+        }
+
         queueMicrotask(() => readableStreamClose(controller))
       },
       start () {},
-      type: undefined
+      type: 'bytes'
     })
   }
 
@@ -19213,13 +19408,17 @@ function extractBody (object, keepalive = false) {
           // When running action is done, close stream.
           queueMicrotask(() => {
             controller.close()
+            controller.byobRequest?.respond(0)
           })
         } else {
           // Whenever one or more bytes are available and stream is not errored,
           // enqueue a Uint8Array wrapping an ArrayBuffer containing the available
           // bytes into stream.
           if (!isErrored(stream)) {
-            controller.enqueue(new Uint8Array(value))
+            const buffer = new Uint8Array(value)
+            if (buffer.byteLength) {
+              controller.enqueue(buffer)
+            }
           }
         }
         return controller.desiredSize > 0
@@ -19227,7 +19426,7 @@ function extractBody (object, keepalive = false) {
       async cancel (reason) {
         await iterator.return()
       },
-      type: undefined
+      type: 'bytes'
     })
   }
 
@@ -19241,11 +19440,6 @@ function extractBody (object, keepalive = false) {
 
 // https://fetch.spec.whatwg.org/#bodyinit-safely-extract
 function safelyExtractBody (object, keepalive = false) {
-  if (!ReadableStream) {
-    // istanbul ignore next
-    ReadableStream = (__nccwpck_require__(5356).ReadableStream)
-  }
-
   // To safely extract a body and a `Content-Type` value from
   // a byte sequence or BodyInit object object, run these steps:
 
@@ -19598,12 +19792,10 @@ module.exports = {
 /***/ }),
 
 /***/ 1037:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module) => {
 
 "use strict";
 
-
-const { MessageChannel, receiveMessageOnPort } = __nccwpck_require__(1267)
 
 const corsSafeListedMethods = ['GET', 'HEAD', 'POST']
 const corsSafeListedMethodsSet = new Set(corsSafeListedMethods)
@@ -19695,41 +19887,7 @@ const subresource = [
 ]
 const subresourceSet = new Set(subresource)
 
-/** @type {globalThis['DOMException']} */
-const DOMException = globalThis.DOMException ?? (() => {
-  // DOMException was only made a global in Node v17.0.0,
-  // but fetch supports >= v16.8.
-  try {
-    atob('~')
-  } catch (err) {
-    return Object.getPrototypeOf(err).constructor
-  }
-})()
-
-let channel
-
-/** @type {globalThis['structuredClone']} */
-const structuredClone =
-  globalThis.structuredClone ??
-  // https://github.com/nodejs/node/blob/b27ae24dcc4251bad726d9d84baf678d1f707fed/lib/internal/structured_clone.js
-  // structuredClone was added in v17.0.0, but fetch supports v16.8
-  function structuredClone (value, options = undefined) {
-    if (arguments.length === 0) {
-      throw new TypeError('missing argument')
-    }
-
-    if (!channel) {
-      channel = new MessageChannel()
-    }
-    channel.port1.unref()
-    channel.port2.unref()
-    channel.port1.postMessage(value, options?.transfer)
-    return receiveMessageOnPort(channel.port2).message
-  }
-
 module.exports = {
-  DOMException,
-  structuredClone,
   subresource,
   forbiddenMethods,
   requestBodyHeader,
@@ -19880,17 +20038,20 @@ function dataURLProcessor (dataURL) {
  * @param {boolean} excludeFragment
  */
 function URLSerializer (url, excludeFragment = false) {
-  const href = url.href
-
   if (!excludeFragment) {
-    return href
+    return url.href
   }
 
-  const hash = href.lastIndexOf('#')
-  if (hash === -1) {
-    return href
+  const href = url.href
+  const hashLength = url.hash.length
+
+  const serialized = hashLength === 0 ? href : href.substring(0, href.length - hashLength)
+
+  if (!hashLength && href.endsWith('#')) {
+    return serialized.slice(0, -1)
   }
-  return href.slice(0, hash)
+
+  return serialized
 }
 
 // https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points
@@ -20307,7 +20468,7 @@ function serializeAMimeType (mimeType) {
     // 4. If value does not solely contain HTTP token code
     //    points or value is the empty string, then:
     if (!HTTP_TOKEN_CODEPOINTS.test(value)) {
-      // 1. Precede each occurence of U+0022 (") or
+      // 1. Precede each occurrence of U+0022 (") or
       //    U+005C (\) in value with U+005C (\).
       value = value.replace(/(\\|")/g, '\\$1')
 
@@ -21074,7 +21235,7 @@ module.exports = {
 
 
 
-const { kHeadersList } = __nccwpck_require__(2785)
+const { kHeadersList, kConstruct } = __nccwpck_require__(2785)
 const { kGuard } = __nccwpck_require__(5861)
 const { kEnumerableProperty } = __nccwpck_require__(3983)
 const {
@@ -21089,6 +21250,13 @@ const kHeadersMap = Symbol('headers map')
 const kHeadersSortedMap = Symbol('headers map sorted')
 
 /**
+ * @param {number} code
+ */
+function isHTTPWhiteSpaceCharCode (code) {
+  return code === 0x00a || code === 0x00d || code === 0x009 || code === 0x020
+}
+
+/**
  * @see https://fetch.spec.whatwg.org/#concept-header-value-normalize
  * @param {string} potentialValue
  */
@@ -21096,12 +21264,12 @@ function headerValueNormalize (potentialValue) {
   //  To normalize a byte sequence potentialValue, remove
   //  any leading and trailing HTTP whitespace bytes from
   //  potentialValue.
+  let i = 0; let j = potentialValue.length
 
-  // Trimming the end with `.replace()` and a RegExp is typically subject to
-  // ReDoS. This is safer and faster.
-  let i = potentialValue.length
-  while (/[\r\n\t ]/.test(potentialValue.charAt(--i)));
-  return potentialValue.slice(0, i + 1).replace(/^[\r\n\t ]+/, '')
+  while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(j - 1))) --j
+  while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i))) ++i
+
+  return i === 0 && j === potentialValue.length ? potentialValue : potentialValue.substring(i, j)
 }
 
 function fill (headers, object) {
@@ -21110,7 +21278,8 @@ function fill (headers, object) {
   // 1. If object is a sequence, then for each header in object:
   // Note: webidl conversion to array has already been done.
   if (Array.isArray(object)) {
-    for (const header of object) {
+    for (let i = 0; i < object.length; ++i) {
+      const header = object[i]
       // 1. If header does not contain exactly two items, then throw a TypeError.
       if (header.length !== 2) {
         throw webidl.errors.exception({
@@ -21120,15 +21289,16 @@ function fill (headers, object) {
       }
 
       // 2. Append (header’s first item, header’s second item) to headers.
-      headers.append(header[0], header[1])
+      appendHeader(headers, header[0], header[1])
     }
   } else if (typeof object === 'object' && object !== null) {
     // Note: null should throw
 
     // 2. Otherwise, object is a record, then for each key → value in object,
     //    append (key, value) to headers
-    for (const [key, value] of Object.entries(object)) {
-      headers.append(key, value)
+    const keys = Object.keys(object)
+    for (let i = 0; i < keys.length; ++i) {
+      appendHeader(headers, keys[i], object[keys[i]])
     }
   } else {
     throw webidl.errors.conversionFailed({
@@ -21139,6 +21309,50 @@ function fill (headers, object) {
   }
 }
 
+/**
+ * @see https://fetch.spec.whatwg.org/#concept-headers-append
+ */
+function appendHeader (headers, name, value) {
+  // 1. Normalize value.
+  value = headerValueNormalize(value)
+
+  // 2. If name is not a header name or value is not a
+  //    header value, then throw a TypeError.
+  if (!isValidHeaderName(name)) {
+    throw webidl.errors.invalidArgument({
+      prefix: 'Headers.append',
+      value: name,
+      type: 'header name'
+    })
+  } else if (!isValidHeaderValue(value)) {
+    throw webidl.errors.invalidArgument({
+      prefix: 'Headers.append',
+      value,
+      type: 'header value'
+    })
+  }
+
+  // 3. If headers’s guard is "immutable", then throw a TypeError.
+  // 4. Otherwise, if headers’s guard is "request" and name is a
+  //    forbidden header name, return.
+  // Note: undici does not implement forbidden header names
+  if (headers[kGuard] === 'immutable') {
+    throw new TypeError('immutable')
+  } else if (headers[kGuard] === 'request-no-cors') {
+    // 5. Otherwise, if headers’s guard is "request-no-cors":
+    // TODO
+  }
+
+  // 6. Otherwise, if headers’s guard is "response" and name is a
+  //    forbidden response-header name, return.
+
+  // 7. Append (name, value) to headers’s header list.
+  return headers[kHeadersList].append(name, value)
+
+  // 8. If headers’s guard is "request-no-cors", then remove
+  //    privileged no-CORS request headers from headers
+}
+
 class HeadersList {
   /** @type {[string, string][]|null} */
   cookies = null
@@ -21147,7 +21361,7 @@ class HeadersList {
     if (init instanceof HeadersList) {
       this[kHeadersMap] = new Map(init[kHeadersMap])
       this[kHeadersSortedMap] = init[kHeadersSortedMap]
-      this.cookies = init.cookies
+      this.cookies = init.cookies === null ? null : [...init.cookies]
     } else {
       this[kHeadersMap] = new Map(init)
       this[kHeadersSortedMap] = null
@@ -21209,7 +21423,7 @@ class HeadersList {
     //    the first such header to value and remove the
     //    others.
     // 2. Otherwise, append header (name, value) to list.
-    return this[kHeadersMap].set(lowercaseName, { name, value })
+    this[kHeadersMap].set(lowercaseName, { name, value })
   }
 
   // https://fetch.spec.whatwg.org/#concept-header-list-delete
@@ -21222,20 +21436,18 @@ class HeadersList {
       this.cookies = null
     }
 
-    return this[kHeadersMap].delete(name)
+    this[kHeadersMap].delete(name)
   }
 
   // https://fetch.spec.whatwg.org/#concept-header-list-get
   get (name) {
-    // 1. If list does not contain name, then return null.
-    if (!this.contains(name)) {
-      return null
-    }
+    const value = this[kHeadersMap].get(name.toLowerCase())
 
+    // 1. If list does not contain name, then return null.
     // 2. Return the values of all headers in list whose name
     //    is a byte-case-insensitive match for name,
     //    separated from each other by 0x2C 0x20, in order.
-    return this[kHeadersMap].get(name.toLowerCase())?.value ?? null
+    return value === undefined ? null : value.value
   }
 
   * [Symbol.iterator] () {
@@ -21261,6 +21473,9 @@ class HeadersList {
 // https://fetch.spec.whatwg.org/#headers-class
 class Headers {
   constructor (init = undefined) {
+    if (init === kConstruct) {
+      return
+    }
     this[kHeadersList] = new HeadersList()
 
     // The new Headers(init) constructor steps are:
@@ -21284,43 +21499,7 @@ class Headers {
     name = webidl.converters.ByteString(name)
     value = webidl.converters.ByteString(value)
 
-    // 1. Normalize value.
-    value = headerValueNormalize(value)
-
-    // 2. If name is not a header name or value is not a
-    //    header value, then throw a TypeError.
-    if (!isValidHeaderName(name)) {
-      throw webidl.errors.invalidArgument({
-        prefix: 'Headers.append',
-        value: name,
-        type: 'header name'
-      })
-    } else if (!isValidHeaderValue(value)) {
-      throw webidl.errors.invalidArgument({
-        prefix: 'Headers.append',
-        value,
-        type: 'header value'
-      })
-    }
-
-    // 3. If headers’s guard is "immutable", then throw a TypeError.
-    // 4. Otherwise, if headers’s guard is "request" and name is a
-    //    forbidden header name, return.
-    // Note: undici does not implement forbidden header names
-    if (this[kGuard] === 'immutable') {
-      throw new TypeError('immutable')
-    } else if (this[kGuard] === 'request-no-cors') {
-      // 5. Otherwise, if headers’s guard is "request-no-cors":
-      // TODO
-    }
-
-    // 6. Otherwise, if headers’s guard is "response" and name is a
-    //    forbidden response-header name, return.
-
-    // 7. Append (name, value) to headers’s header list.
-    // 8. If headers’s guard is "request-no-cors", then remove
-    //    privileged no-CORS request headers from headers
-    return this[kHeadersList].append(name, value)
+    return appendHeader(this, name, value)
   }
 
   // https://fetch.spec.whatwg.org/#dom-headers-delete
@@ -21365,7 +21544,7 @@ class Headers {
     // 7. Delete name from this’s header list.
     // 8. If this’s guard is "request-no-cors", then remove
     //    privileged no-CORS request headers from this.
-    return this[kHeadersList].delete(name)
+    this[kHeadersList].delete(name)
   }
 
   // https://fetch.spec.whatwg.org/#dom-headers-get
@@ -21458,7 +21637,7 @@ class Headers {
     // 7. Set (name, value) in this’s header list.
     // 8. If this’s guard is "request-no-cors", then remove
     //    privileged no-CORS request headers from this
-    return this[kHeadersList].set(name, value)
+    this[kHeadersList].set(name, value)
   }
 
   // https://fetch.spec.whatwg.org/#dom-headers-getsetcookie
@@ -21494,7 +21673,8 @@ class Headers {
     const cookies = this[kHeadersList].cookies
 
     // 3. For each name of names:
-    for (const [name, value] of names) {
+    for (let i = 0; i < names.length; ++i) {
+      const [name, value] = names[i]
       // 1. If name is `set-cookie`, then:
       if (name === 'set-cookie') {
         // 1. Let values be a list of all values of headers in list whose name
@@ -21502,8 +21682,8 @@ class Headers {
 
         // 2. For each value of values:
         // 1. Append (name, value) to headers.
-        for (const value of cookies) {
-          headers.push([name, value])
+        for (let j = 0; j < cookies.length; ++j) {
+          headers.push([name, cookies[j]])
         }
       } else {
         // 2. Otherwise:
@@ -21527,6 +21707,12 @@ class Headers {
   keys () {
     webidl.brandCheck(this, Headers)
 
+    if (this[kGuard] === 'immutable') {
+      const value = this[kHeadersSortedMap]
+      return makeIterator(() => value, 'Headers',
+        'key')
+    }
+
     return makeIterator(
       () => [...this[kHeadersSortedMap].values()],
       'Headers',
@@ -21537,6 +21723,12 @@ class Headers {
   values () {
     webidl.brandCheck(this, Headers)
 
+    if (this[kGuard] === 'immutable') {
+      const value = this[kHeadersSortedMap]
+      return makeIterator(() => value, 'Headers',
+        'value')
+    }
+
     return makeIterator(
       () => [...this[kHeadersSortedMap].values()],
       'Headers',
@@ -21546,6 +21738,12 @@ class Headers {
 
   entries () {
     webidl.brandCheck(this, Headers)
+
+    if (this[kGuard] === 'immutable') {
+      const value = this[kHeadersSortedMap]
+      return makeIterator(() => value, 'Headers',
+        'key+value')
+    }
 
     return makeIterator(
       () => [...this[kHeadersSortedMap].values()],
@@ -21672,25 +21870,25 @@ const {
   isomorphicEncode,
   urlIsLocal,
   urlIsHttpHttpsScheme,
-  urlHasHttpsScheme
+  urlHasHttpsScheme,
+  simpleRangeHeaderValue,
+  buildContentRange
 } = __nccwpck_require__(2538)
 const { kState, kHeaders, kGuard, kRealm } = __nccwpck_require__(5861)
 const assert = __nccwpck_require__(9491)
-const { safelyExtractBody } = __nccwpck_require__(9990)
+const { safelyExtractBody, extractBody } = __nccwpck_require__(9990)
 const {
   redirectStatusSet,
   nullBodyStatus,
   safeMethodsSet,
   requestBodyHeader,
-  subresourceSet,
-  DOMException
+  subresourceSet
 } = __nccwpck_require__(1037)
-const { kHeadersList } = __nccwpck_require__(2785)
+const { kHeadersList, kConstruct } = __nccwpck_require__(2785)
 const EE = __nccwpck_require__(2361)
 const { Readable, pipeline } = __nccwpck_require__(2781)
 const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = __nccwpck_require__(3983)
-const { dataURLProcessor, serializeAMimeType } = __nccwpck_require__(685)
-const { TransformStream } = __nccwpck_require__(5356)
+const { dataURLProcessor, serializeAMimeType, parseMIMEType } = __nccwpck_require__(685)
 const { getGlobalDispatcher } = __nccwpck_require__(1892)
 const { webidl } = __nccwpck_require__(1744)
 const { STATUS_CODES } = __nccwpck_require__(3685)
@@ -21698,7 +21896,6 @@ const GET_OR_HEAD = ['GET', 'HEAD']
 
 /** @type {import('buffer').resolveObjectURL} */
 let resolveObjectURL
-let ReadableStream = globalThis.ReadableStream
 
 class Fetch extends EE {
   constructor (dispatcher) {
@@ -21864,9 +22061,10 @@ function fetch (input, init = {}) {
 
     // 4. Set responseObject to the result of creating a Response object,
     // given response, "immutable", and relevantRealm.
-    responseObject = new Response()
+    responseObject = new Response(kConstruct)
     responseObject[kState] = response
     responseObject[kRealm] = relevantRealm
+    responseObject[kHeaders] = new Headers(kConstruct)
     responseObject[kHeaders][kHeadersList] = response.headersList
     responseObject[kHeaders][kGuard] = 'immutable'
     responseObject[kHeaders][kRealm] = relevantRealm
@@ -21918,7 +22116,7 @@ function finalizeAndReportTiming (response, initiatorType = 'other') {
   }
 
   // 8. If response’s timing allow passed flag is not set, then:
-  if (!timingInfo.timingAllowPassed) {
+  if (!response.timingAllowPassed) {
     //  1. Set timingInfo to a the result of creating an opaque timing info for timingInfo.
     timingInfo = createOpaqueTimingInfo({
       startTime: timingInfo.startTime
@@ -22036,9 +22234,9 @@ function fetching ({
   // 5. Let timingInfo be a new fetch timing info whose start time and
   // post-redirect start time are the coarsened shared current time given
   // crossOriginIsolatedCapability.
-  const currenTime = coarsenedSharedCurrentTime(crossOriginIsolatedCapability)
+  const currentTime = coarsenedSharedCurrentTime(crossOriginIsolatedCapability)
   const timingInfo = createOpaqueTimingInfo({
-    startTime: currenTime
+    startTime: currentTime
   })
 
   // 6. Let fetchParams be a new fetch params whose
@@ -22447,38 +22645,118 @@ function schemeFetch (fetchParams) {
         return Promise.resolve(makeNetworkError('NetworkError when attempting to fetch resource.'))
       }
 
-      const blobURLEntryObject = resolveObjectURL(blobURLEntry.toString())
+      const blob = resolveObjectURL(blobURLEntry.toString())
 
       // 2. If request’s method is not `GET`, blobURLEntry is null, or blobURLEntry’s
       //    object is not a Blob object, then return a network error.
-      if (request.method !== 'GET' || !isBlobLike(blobURLEntryObject)) {
+      if (request.method !== 'GET' || !isBlobLike(blob)) {
         return Promise.resolve(makeNetworkError('invalid method'))
       }
 
-      // 3. Let bodyWithType be the result of safely extracting blobURLEntry’s object.
-      const bodyWithType = safelyExtractBody(blobURLEntryObject)
+      // 3. Let blob be blobURLEntry’s object.
+      // Note: done above
 
-      // 4. Let body be bodyWithType’s body.
-      const body = bodyWithType[0]
+      // 4. Let response be a new response.
+      const response = makeResponse()
 
-      // 5. Let length be body’s length, serialized and isomorphic encoded.
-      const length = isomorphicEncode(`${body.length}`)
+      // 5. Let fullLength be blob’s size.
+      const fullLength = blob.size
 
-      // 6. Let type be bodyWithType’s type if it is non-null; otherwise the empty byte sequence.
-      const type = bodyWithType[1] ?? ''
+      // 6. Let serializedFullLength be fullLength, serialized and isomorphic encoded.
+      const serializedFullLength = isomorphicEncode(`${fullLength}`)
 
-      // 7. Return a new response whose status message is `OK`, header list is
-      //    « (`Content-Length`, length), (`Content-Type`, type) », and body is body.
-      const response = makeResponse({
-        statusText: 'OK',
-        headersList: [
-          ['content-length', { name: 'Content-Length', value: length }],
-          ['content-type', { name: 'Content-Type', value: type }]
-        ]
-      })
+      // 7. Let type be blob’s type.
+      const type = blob.type
 
-      response.body = body
+      // 8. If request’s header list does not contain `Range`:
+      // 9. Otherwise:
+      if (!request.headersList.contains('range')) {
+        // 1. Let bodyWithType be the result of safely extracting blob.
+        // Note: in the FileAPI a blob "object" is a Blob *or* a MediaSource.
+        // In node, this can only ever be a Blob. Therefore we can safely
+        // use extractBody directly.
+        const bodyWithType = extractBody(blob)
 
+        // 2. Set response’s status message to `OK`.
+        response.statusText = 'OK'
+
+        // 3. Set response’s body to bodyWithType’s body.
+        response.body = bodyWithType[0]
+
+        // 4. Set response’s header list to « (`Content-Length`, serializedFullLength), (`Content-Type`, type) ».
+        response.headersList.set('content-length', serializedFullLength)
+        response.headersList.set('content-type', type)
+      } else {
+        // 1. Set response’s range-requested flag.
+        response.rangeRequested = true
+
+        // 2. Let rangeHeader be the result of getting `Range` from request’s header list.
+        const rangeHeader = request.headersList.get('range')
+
+        // 3. Let rangeValue be the result of parsing a single range header value given rangeHeader and true.
+        const rangeValue = simpleRangeHeaderValue(rangeHeader, true)
+
+        // 4. If rangeValue is failure, then return a network error.
+        if (rangeValue === 'failure') {
+          return Promise.resolve(makeNetworkError('failed to fetch the data URL'))
+        }
+
+        // 5. Let (rangeStart, rangeEnd) be rangeValue.
+        let { rangeStartValue: rangeStart, rangeEndValue: rangeEnd } = rangeValue
+
+        // 6. If rangeStart is null:
+        // 7. Otherwise:
+        if (rangeStart === null) {
+          // 1. Set rangeStart to fullLength − rangeEnd.
+          rangeStart = fullLength - rangeEnd
+
+          // 2. Set rangeEnd to rangeStart + rangeEnd − 1.
+          rangeEnd = rangeStart + rangeEnd - 1
+        } else {
+          // 1. If rangeStart is greater than or equal to fullLength, then return a network error.
+          if (rangeStart >= fullLength) {
+            return Promise.resolve(makeNetworkError('Range start is greater than the blob\'s size.'))
+          }
+
+          // 2. If rangeEnd is null or rangeEnd is greater than or equal to fullLength, then set
+          //    rangeEnd to fullLength − 1.
+          if (rangeEnd === null || rangeEnd >= fullLength) {
+            rangeEnd = fullLength - 1
+          }
+        }
+
+        // 8. Let slicedBlob be the result of invoking slice blob given blob, rangeStart,
+        //    rangeEnd + 1, and type.
+        const slicedBlob = blob.slice(rangeStart, rangeEnd, type)
+
+        // 9. Let slicedBodyWithType be the result of safely extracting slicedBlob.
+        // Note: same reason as mentioned above as to why we use extractBody
+        const slicedBodyWithType = extractBody(slicedBlob)
+
+        // 10. Set response’s body to slicedBodyWithType’s body.
+        response.body = slicedBodyWithType[0]
+
+        // 11. Let serializedSlicedLength be slicedBlob’s size, serialized and isomorphic encoded.
+        const serializedSlicedLength = isomorphicEncode(`${slicedBlob.size}`)
+
+        // 12. Let contentRange be the result of invoking build a content range given rangeStart,
+        //     rangeEnd, and fullLength.
+        const contentRange = buildContentRange(rangeStart, rangeEnd, fullLength)
+
+        // 13. Set response’s status to 206.
+        response.status = 206
+
+        // 14. Set response’s status message to `Partial Content`.
+        response.statusText = 'Partial Content'
+
+        // 15. Set response’s header list to « (`Content-Length`, serializedSlicedLength),
+        //     (`Content-Type`, type), (`Content-Range`, contentRange) ».
+        response.headersList.set('content-length', serializedSlicedLength)
+        response.headersList.set('content-type', type)
+        response.headersList.set('content-range', contentRange)
+      }
+
+      // 10. Return response.
       return Promise.resolve(response)
     }
     case 'data:': {
@@ -22540,92 +22818,147 @@ function finalizeResponse (fetchParams, response) {
 
 // https://fetch.spec.whatwg.org/#fetch-finale
 function fetchFinale (fetchParams, response) {
-  // 1. If response is a network error, then:
-  if (response.type === 'error') {
-    // 1. Set response’s URL list to « fetchParams’s request’s URL list[0] ».
-    response.urlList = [fetchParams.request.urlList[0]]
+  // 1. Let timingInfo be fetchParams’s timing info.
+  let timingInfo = fetchParams.timingInfo
 
-    // 2. Set response’s timing info to the result of creating an opaque timing
-    // info for fetchParams’s timing info.
-    response.timingInfo = createOpaqueTimingInfo({
-      startTime: fetchParams.timingInfo.startTime
-    })
-  }
+  // 2. If response is not a network error and fetchParams’s request’s client is a secure context,
+  //    then set timingInfo’s server-timing headers to the result of getting, decoding, and splitting
+  //    `Server-Timing` from response’s internal response’s header list.
+  // TODO
 
-  // 2. Let processResponseEndOfBody be the following steps:
+  // 3. Let processResponseEndOfBody be the following steps:
   const processResponseEndOfBody = () => {
-    // 1. Set fetchParams’s request’s done flag.
-    fetchParams.request.done = true
+    // 1. Let unsafeEndTime be the unsafe shared current time.
+    const unsafeEndTime = Date.now() // ?
 
-    // If fetchParams’s process response end-of-body is not null,
-    // then queue a fetch task to run fetchParams’s process response
-    // end-of-body given response with fetchParams’s task destination.
-    if (fetchParams.processResponseEndOfBody != null) {
-      queueMicrotask(() => fetchParams.processResponseEndOfBody(response))
+    // 2. If fetchParams’s request’s destination is "document", then set fetchParams’s controller’s
+    //    full timing info to fetchParams’s timing info.
+    if (fetchParams.request.destination === 'document') {
+      fetchParams.controller.fullTimingInfo = timingInfo
     }
+
+    // 3. Set fetchParams’s controller’s report timing steps to the following steps given a global object global:
+    fetchParams.controller.reportTimingSteps = () => {
+      // 1. If fetchParams’s request’s URL’s scheme is not an HTTP(S) scheme, then return.
+      if (fetchParams.request.url.protocol !== 'https:') {
+        return
+      }
+
+      // 2. Set timingInfo’s end time to the relative high resolution time given unsafeEndTime and global.
+      timingInfo.endTime = unsafeEndTime
+
+      // 3. Let cacheState be response’s cache state.
+      let cacheState = response.cacheState
+
+      // 4. Let bodyInfo be response’s body info.
+      const bodyInfo = response.bodyInfo
+
+      // 5. If response’s timing allow passed flag is not set, then set timingInfo to the result of creating an
+      //    opaque timing info for timingInfo and set cacheState to the empty string.
+      if (!response.timingAllowPassed) {
+        timingInfo = createOpaqueTimingInfo(timingInfo)
+
+        cacheState = ''
+      }
+
+      // 6. Let responseStatus be 0.
+      let responseStatus = 0
+
+      // 7. If fetchParams’s request’s mode is not "navigate" or response’s has-cross-origin-redirects is false:
+      if (fetchParams.request.mode !== 'navigator' || !response.hasCrossOriginRedirects) {
+        // 1. Set responseStatus to response’s status.
+        responseStatus = response.status
+
+        // 2. Let mimeType be the result of extracting a MIME type from response’s header list.
+        const mimeType = parseMIMEType(response.headersList.get('content-type')) // TODO: fix
+
+        // 3. If mimeType is not failure, then set bodyInfo’s content type to the result of minimizing a supported MIME type given mimeType.
+        if (mimeType !== 'failure') {
+          // TODO
+        }
+      }
+
+      // 8. If fetchParams’s request’s initiator type is non-null, then mark resource timing given timingInfo,
+      //    fetchParams’s request’s URL, fetchParams’s request’s initiator type, global, cacheState, bodyInfo,
+      //    and responseStatus.
+      if (fetchParams.request.initiatorType != null) {
+        // TODO: update markresourcetiming
+        markResourceTiming(timingInfo, fetchParams.request.url, fetchParams.request.initiatorType, globalThis, cacheState, bodyInfo, responseStatus)
+      }
+    }
+
+    // 4. Let processResponseEndOfBodyTask be the following steps:
+    const processResponseEndOfBodyTask = () => {
+      // 1. Set fetchParams’s request’s done flag.
+      fetchParams.request.done = true
+
+      // 2. If fetchParams’s process response end-of-body is non-null, then run fetchParams’s process
+      //    response end-of-body given response.
+      if (fetchParams.processResponseEndOfBody != null) {
+        queueMicrotask(() => fetchParams.processResponseEndOfBody(response))
+      }
+
+      // 3. If fetchParams’s request’s initiator type is non-null and fetchParams’s request’s client’s
+      //    global object is fetchParams’s task destination, then run fetchParams’s controller’s report
+      //    timing steps given fetchParams’s request’s client’s global object.
+      if (fetchParams.request.initiatorType != null) {
+        fetchParams.controller.reportTimingSteps()
+      }
+    }
+
+    // 5. Queue a fetch task to run processResponseEndOfBodyTask with fetchParams’s task destination
+    queueMicrotask(() => processResponseEndOfBodyTask())
   }
 
-  // 3. If fetchParams’s process response is non-null, then queue a fetch task
-  // to run fetchParams’s process response given response, with fetchParams’s
-  // task destination.
+  // 4. If fetchParams’s process response is non-null, then queue a fetch task to run fetchParams’s
+  //    process response given response, with fetchParams’s task destination.
   if (fetchParams.processResponse != null) {
     queueMicrotask(() => fetchParams.processResponse(response))
   }
 
-  // 4. If response’s body is null, then run processResponseEndOfBody.
-  if (response.body == null) {
+  // 5. Let internalResponse be response, if response is a network error; otherwise response’s internal response.
+  const internalResponse = response.type === 'error' ? response : (response.internalResponse ?? response)
+
+  // 6. If internalResponse’s body is null, then run processResponseEndOfBody.
+  // 7. Otherwise:
+  if (internalResponse.body == null) {
     processResponseEndOfBody()
   } else {
-  // 5. Otherwise:
-
-    // 1. Let transformStream be a new a TransformStream.
-
-    // 2. Let identityTransformAlgorithm be an algorithm which, given chunk,
-    // enqueues chunk in transformStream.
-    const identityTransformAlgorithm = (chunk, controller) => {
-      controller.enqueue(chunk)
-    }
-
-    // 3. Set up transformStream with transformAlgorithm set to identityTransformAlgorithm
-    // and flushAlgorithm set to processResponseEndOfBody.
+    // 1. Let transformStream be a new TransformStream.
+    // 2. Let identityTransformAlgorithm be an algorithm which, given chunk, enqueues chunk in transformStream.
+    // 3. Set up transformStream with transformAlgorithm set to identityTransformAlgorithm and flushAlgorithm
+    //    set to processResponseEndOfBody.
     const transformStream = new TransformStream({
       start () {},
-      transform: identityTransformAlgorithm,
+      transform (chunk, controller) {
+        controller.enqueue(chunk)
+      },
       flush: processResponseEndOfBody
-    }, {
-      size () {
-        return 1
-      }
-    }, {
-      size () {
-        return 1
-      }
     })
 
-    // 4. Set response’s body to the result of piping response’s body through transformStream.
-    response.body = { stream: response.body.stream.pipeThrough(transformStream) }
-  }
+    // 4. Set internalResponse’s body’s stream to the result of internalResponse’s body’s stream piped through transformStream.
+    internalResponse.body.stream.pipeThrough(transformStream)
 
-  // 6. If fetchParams’s process response consume body is non-null, then:
-  if (fetchParams.processResponseConsumeBody != null) {
-    // 1. Let processBody given nullOrBytes be this step: run fetchParams’s
-    // process response consume body given response and nullOrBytes.
-    const processBody = (nullOrBytes) => fetchParams.processResponseConsumeBody(response, nullOrBytes)
+    const byteStream = new ReadableStream({
+      readableStream: transformStream.readable,
+      async start (controller) {
+        const reader = this.readableStream.getReader()
 
-    // 2. Let processBodyError be this step: run fetchParams’s process
-    // response consume body given response and failure.
-    const processBodyError = (failure) => fetchParams.processResponseConsumeBody(response, failure)
+        while (true) {
+          const { done, value } = await reader.read()
 
-    // 3. If response’s body is null, then queue a fetch task to run processBody
-    // given null, with fetchParams’s task destination.
-    if (response.body == null) {
-      queueMicrotask(() => processBody(null))
-    } else {
-      // 4. Otherwise, fully read response’s body given processBody, processBodyError,
-      // and fetchParams’s task destination.
-      return fullyReadBody(response.body, processBody, processBodyError)
-    }
-    return Promise.resolve()
+          if (done) {
+            queueMicrotask(() => readableStreamClose(controller))
+            break
+          }
+
+          controller.enqueue(value)
+        }
+      },
+      type: 'bytes'
+    })
+
+    internalResponse.body.stream = byteStream
   }
 }
 
@@ -23427,13 +23760,8 @@ async function httpNetworkFetch (
   // TODO
 
   // 15. Let stream be a new ReadableStream.
-  // 16. Set up stream with pullAlgorithm set to pullAlgorithm,
-  // cancelAlgorithm set to cancelAlgorithm, highWaterMark set to
-  // highWaterMark, and sizeAlgorithm set to sizeAlgorithm.
-  if (!ReadableStream) {
-    ReadableStream = (__nccwpck_require__(5356).ReadableStream)
-  }
-
+  // 16. Set up stream with byte reading support with pullAlgorithm set to pullAlgorithm,
+  //     cancelAlgorithm set to cancelAlgorithm.
   const stream = new ReadableStream(
     {
       async start (controller) {
@@ -23444,13 +23772,8 @@ async function httpNetworkFetch (
       },
       async cancel (reason) {
         await cancelAlgorithm(reason)
-      }
-    },
-    {
-      highWaterMark: 0,
-      size () {
-        return 1
-      }
+      },
+      type: 'bytes'
     }
   )
 
@@ -23530,7 +23853,10 @@ async function httpNetworkFetch (
 
       // 7. Enqueue a Uint8Array wrapping an ArrayBuffer containing bytes
       // into stream.
-      fetchParams.controller.controller.enqueue(new Uint8Array(bytes))
+      const buffer = new Uint8Array(bytes)
+      if (buffer.byteLength) {
+        fetchParams.controller.controller.enqueue(buffer)
+      }
 
       // 8. If stream is errored, then terminate the ongoing fetch.
       if (isErrored(stream)) {
@@ -23589,7 +23915,7 @@ async function httpNetworkFetch (
         path: url.pathname + url.search,
         origin: url.origin,
         method: request.method,
-        body: fetchParams.controller.dispatcher.isMockActive ? request.body && request.body.source : body,
+        body: fetchParams.controller.dispatcher.isMockActive ? request.body && (request.body.source || request.body.stream) : body,
         headers: request.headersList.entries,
         maxRedirections: 0,
         upgrade: request.mode === 'websocket' ? 'websocket' : undefined
@@ -23634,7 +23960,7 @@ async function httpNetworkFetch (
                 location = val
               }
 
-              headers.append(key, val)
+              headers[kHeadersList].append(key, val)
             }
           } else {
             const keys = Object.keys(headersList)
@@ -23648,7 +23974,7 @@ async function httpNetworkFetch (
                 location = val
               }
 
-              headers.append(key, val)
+              headers[kHeadersList].append(key, val)
             }
           }
 
@@ -23752,7 +24078,7 @@ async function httpNetworkFetch (
             const key = headersList[n + 0].toString('latin1')
             const val = headersList[n + 1].toString('latin1')
 
-            headers.append(key, val)
+            headers[kHeadersList].append(key, val)
           }
 
           resolve({
@@ -23795,7 +24121,8 @@ const {
   isValidHTTPToken,
   sameOrigin,
   normalizeMethod,
-  makePolicyContainer
+  makePolicyContainer,
+  normalizeMethodRecord
 } = __nccwpck_require__(2538)
 const {
   forbiddenMethodsSet,
@@ -23812,13 +24139,10 @@ const { kHeaders, kSignal, kState, kGuard, kRealm } = __nccwpck_require__(5861)
 const { webidl } = __nccwpck_require__(1744)
 const { getGlobalOrigin } = __nccwpck_require__(1246)
 const { URLSerializer } = __nccwpck_require__(685)
-const { kHeadersList } = __nccwpck_require__(2785)
+const { kHeadersList, kConstruct } = __nccwpck_require__(2785)
 const assert = __nccwpck_require__(9491)
 const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = __nccwpck_require__(2361)
 
-let TransformStream = globalThis.TransformStream
-
-const kInit = Symbol('init')
 const kAbortController = Symbol('abortController')
 
 const requestFinalizer = new FinalizationRegistry(({ signal, abort }) => {
@@ -23829,7 +24153,7 @@ const requestFinalizer = new FinalizationRegistry(({ signal, abort }) => {
 class Request {
   // https://fetch.spec.whatwg.org/#dom-request
   constructor (input, init = {}) {
-    if (input === kInit) {
+    if (input === kConstruct) {
       return
     }
 
@@ -23968,8 +24292,10 @@ class Request {
       urlList: [...request.urlList]
     })
 
+    const initHasKey = Object.keys(init).length !== 0
+
     // 13. If init is not empty, then:
-    if (Object.keys(init).length > 0) {
+    if (initHasKey) {
       // 1. If request’s mode is "navigate", then set it to "same-origin".
       if (request.mode === 'navigate') {
         request.mode = 'same-origin'
@@ -24084,7 +24410,7 @@ class Request {
     }
 
     // 23. If init["integrity"] exists, then set request’s integrity metadata to it.
-    if (init.integrity !== undefined && init.integrity != null) {
+    if (init.integrity != null) {
       request.integrity = String(init.integrity)
     }
 
@@ -24100,16 +24426,16 @@ class Request {
 
       // 2. If method is not a method or method is a forbidden method, then
       // throw a TypeError.
-      if (!isValidHTTPToken(init.method)) {
-        throw TypeError(`'${init.method}' is not a valid HTTP method.`)
+      if (!isValidHTTPToken(method)) {
+        throw new TypeError(`'${method}' is not a valid HTTP method.`)
       }
 
       if (forbiddenMethodsSet.has(method.toUpperCase())) {
-        throw TypeError(`'${init.method}' HTTP method is unsupported.`)
+        throw new TypeError(`'${method}' HTTP method is unsupported.`)
       }
 
       // 3. Normalize method.
-      method = normalizeMethod(init.method)
+      method = normalizeMethodRecord[method] ?? normalizeMethod(method)
 
       // 4. Set request’s method to method.
       request.method = method
@@ -24180,7 +24506,7 @@ class Request {
     // 30. Set this’s headers to a new Headers object with this’s relevant
     // Realm, whose header list is request’s header list and guard is
     // "request".
-    this[kHeaders] = new Headers()
+    this[kHeaders] = new Headers(kConstruct)
     this[kHeaders][kHeadersList] = request.headersList
     this[kHeaders][kGuard] = 'request'
     this[kHeaders][kRealm] = this[kRealm]
@@ -24200,25 +24526,25 @@ class Request {
     }
 
     // 32. If init is not empty, then:
-    if (Object.keys(init).length !== 0) {
+    if (initHasKey) {
+      /** @type {HeadersList} */
+      const headersList = this[kHeaders][kHeadersList]
       // 1. Let headers be a copy of this’s headers and its associated header
       // list.
-      let headers = new Headers(this[kHeaders])
-
       // 2. If init["headers"] exists, then set headers to init["headers"].
-      if (init.headers !== undefined) {
-        headers = init.headers
-      }
+      const headers = init.headers !== undefined ? init.headers : new HeadersList(headersList)
 
       // 3. Empty this’s headers’s header list.
-      this[kHeaders][kHeadersList].clear()
+      headersList.clear()
 
       // 4. If headers is a Headers object, then for each header in its header
       // list, append header’s name/header’s value to this’s headers.
-      if (headers.constructor.name === 'Headers') {
+      if (headers instanceof HeadersList) {
         for (const [key, val] of headers) {
-          this[kHeaders].append(key, val)
+          headersList.append(key, val)
         }
+        // Note: Copy the `set-cookie` meta-data.
+        headersList.cookies = headers.cookies
       } else {
         // 5. Otherwise, fill this’s headers with headers.
         fillHeaders(this[kHeaders], headers)
@@ -24299,10 +24625,6 @@ class Request {
       }
 
       // 2. Set finalBody to the result of creating a proxy for inputBody.
-      if (!TransformStream) {
-        TransformStream = (__nccwpck_require__(5356).TransformStream)
-      }
-
       // https://streams.spec.whatwg.org/#readablestream-create-a-proxy
       const identityTransform = new TransformStream()
       inputBody.stream.pipeThrough(identityTransform)
@@ -24507,10 +24829,10 @@ class Request {
 
     // 3. Let clonedRequestObject be the result of creating a Request object,
     // given clonedRequest, this’s headers’s guard, and this’s relevant Realm.
-    const clonedRequestObject = new Request(kInit)
+    const clonedRequestObject = new Request(kConstruct)
     clonedRequestObject[kState] = clonedRequest
     clonedRequestObject[kRealm] = this[kRealm]
-    clonedRequestObject[kHeaders] = new Headers()
+    clonedRequestObject[kHeaders] = new Headers(kConstruct)
     clonedRequestObject[kHeaders][kHeadersList] = clonedRequest.headersList
     clonedRequestObject[kHeaders][kGuard] = this[kHeaders][kGuard]
     clonedRequestObject[kHeaders][kRealm] = this[kHeaders][kRealm]
@@ -24752,19 +25074,17 @@ const {
 } = __nccwpck_require__(2538)
 const {
   redirectStatusSet,
-  nullBodyStatus,
-  DOMException
+  nullBodyStatus
 } = __nccwpck_require__(1037)
 const { kState, kHeaders, kGuard, kRealm } = __nccwpck_require__(5861)
 const { webidl } = __nccwpck_require__(1744)
 const { FormData } = __nccwpck_require__(2015)
 const { getGlobalOrigin } = __nccwpck_require__(1246)
 const { URLSerializer } = __nccwpck_require__(685)
-const { kHeadersList } = __nccwpck_require__(2785)
+const { kHeadersList, kConstruct } = __nccwpck_require__(2785)
 const assert = __nccwpck_require__(9491)
 const { types } = __nccwpck_require__(3837)
 
-const ReadableStream = globalThis.ReadableStream || (__nccwpck_require__(5356).ReadableStream)
 const textEncoder = new TextEncoder('utf-8')
 
 // https://fetch.spec.whatwg.org/#response-class
@@ -24777,9 +25097,10 @@ class Response {
     // The static error() method steps are to return the result of creating a
     // Response object, given a new network error, "immutable", and this’s
     // relevant Realm.
-    const responseObject = new Response()
+    const responseObject = new Response(kConstruct)
     responseObject[kState] = makeNetworkError()
     responseObject[kRealm] = relevantRealm
+    responseObject[kHeaders] = new Headers(kConstruct)
     responseObject[kHeaders][kHeadersList] = responseObject[kState].headersList
     responseObject[kHeaders][kGuard] = 'immutable'
     responseObject[kHeaders][kRealm] = relevantRealm
@@ -24805,8 +25126,11 @@ class Response {
     // 3. Let responseObject be the result of creating a Response object, given a new response,
     //    "response", and this’s relevant Realm.
     const relevantRealm = { settingsObject: {} }
-    const responseObject = new Response()
+    const responseObject = new Response(kConstruct)
+    responseObject[kState] = makeResponse({})
     responseObject[kRealm] = relevantRealm
+    responseObject[kHeaders] = new Headers(kConstruct)
+    responseObject[kHeaders][kHeadersList] = responseObject[kState].headersList
     responseObject[kHeaders][kGuard] = 'response'
     responseObject[kHeaders][kRealm] = relevantRealm
 
@@ -24846,8 +25170,11 @@ class Response {
 
     // 4. Let responseObject be the result of creating a Response object,
     // given a new response, "immutable", and this’s relevant Realm.
-    const responseObject = new Response()
+    const responseObject = new Response(kConstruct)
+    responseObject[kState] = makeResponse({})
     responseObject[kRealm] = relevantRealm
+    responseObject[kHeaders] = new Headers(kConstruct)
+    responseObject[kHeaders][kHeadersList] = responseObject[kState].headersList
     responseObject[kHeaders][kGuard] = 'immutable'
     responseObject[kHeaders][kRealm] = relevantRealm
 
@@ -24866,6 +25193,10 @@ class Response {
 
   // https://fetch.spec.whatwg.org/#dom-response
   constructor (body = null, init = {}) {
+    if (body === kConstruct) {
+      return
+    }
+
     if (body !== null) {
       body = webidl.converters.BodyInit(body)
     }
@@ -24881,7 +25212,7 @@ class Response {
     // 2. Set this’s headers to a new Headers object with this’s relevant
     // Realm, whose header list is this’s response’s header list and guard
     // is "response".
-    this[kHeaders] = new Headers()
+    this[kHeaders] = new Headers(kConstruct)
     this[kHeaders][kGuard] = 'response'
     this[kHeaders][kHeadersList] = this[kState].headersList
     this[kHeaders][kRealm] = this[kRealm]
@@ -24997,9 +25328,10 @@ class Response {
 
     // 3. Return the result of creating a Response object, given
     // clonedResponse, this’s headers’s guard, and this’s relevant Realm.
-    const clonedResponseObject = new Response()
+    const clonedResponseObject = new Response(kConstruct)
     clonedResponseObject[kState] = clonedResponse
     clonedResponseObject[kRealm] = this[kRealm]
+    clonedResponseObject[kHeaders] = new Headers(kConstruct)
     clonedResponseObject[kHeaders][kHeadersList] = clonedResponse.headersList
     clonedResponseObject[kHeaders][kGuard] = this[kHeaders][kGuard]
     clonedResponseObject[kHeaders][kRealm] = this[kHeaders][kRealm]
@@ -25072,10 +25404,10 @@ function makeResponse (init) {
     cacheState: '',
     statusText: '',
     ...init,
-    headersList: init.headersList
-      ? new HeadersList(init.headersList)
+    headersList: init?.headersList
+      ? new HeadersList(init?.headersList)
       : new HeadersList(),
-    urlList: init.urlList ? [...init.urlList] : []
+    urlList: init?.urlList ? [...init.urlList] : []
   }
 }
 
@@ -25251,11 +25583,7 @@ webidl.converters.XMLHttpRequestBodyInit = function (V) {
     return webidl.converters.Blob(V, { strict: false })
   }
 
-  if (
-    types.isAnyArrayBuffer(V) ||
-    types.isTypedArray(V) ||
-    types.isDataView(V)
-  ) {
+  if (types.isArrayBuffer(V) || types.isTypedArray(V) || types.isDataView(V)) {
     return webidl.converters.BufferSource(V)
   }
 
@@ -25441,52 +25769,57 @@ function isValidReasonPhrase (statusText) {
   return true
 }
 
-function isTokenChar (c) {
-  return !(
-    c >= 0x7f ||
-    c <= 0x20 ||
-    c === '(' ||
-    c === ')' ||
-    c === '<' ||
-    c === '>' ||
-    c === '@' ||
-    c === ',' ||
-    c === ';' ||
-    c === ':' ||
-    c === '\\' ||
-    c === '"' ||
-    c === '/' ||
-    c === '[' ||
-    c === ']' ||
-    c === '?' ||
-    c === '=' ||
-    c === '{' ||
-    c === '}'
-  )
+/**
+ * @see https://tools.ietf.org/html/rfc7230#section-3.2.6
+ * @param {number} c
+ */
+function isTokenCharCode (c) {
+  switch (c) {
+    case 0x22:
+    case 0x28:
+    case 0x29:
+    case 0x2c:
+    case 0x2f:
+    case 0x3a:
+    case 0x3b:
+    case 0x3c:
+    case 0x3d:
+    case 0x3e:
+    case 0x3f:
+    case 0x40:
+    case 0x5b:
+    case 0x5c:
+    case 0x5d:
+    case 0x7b:
+    case 0x7d:
+      // DQUOTE and "(),/:;<=>?@[\]{}"
+      return false
+    default:
+      // VCHAR %x21-7E
+      return c >= 0x21 && c <= 0x7e
+  }
 }
 
-// See RFC 7230, Section 3.2.6.
-// https://github.com/chromium/chromium/blob/d7da0240cae77824d1eda25745c4022757499131/third_party/blink/renderer/platform/network/http_parsers.cc#L321
+/**
+ * @param {string} characters
+ */
 function isValidHTTPToken (characters) {
-  if (!characters || typeof characters !== 'string') {
+  if (characters.length === 0) {
     return false
   }
   for (let i = 0; i < characters.length; ++i) {
-    const c = characters.charCodeAt(i)
-    if (c > 0x7f || !isTokenChar(c)) {
+    if (!isTokenCharCode(characters.charCodeAt(i))) {
       return false
     }
   }
   return true
 }
 
-// https://fetch.spec.whatwg.org/#header-name
-// https://github.com/chromium/chromium/blob/b3d37e6f94f87d59e44662d6078f6a12de845d17/net/http/http_util.cc#L342
+/**
+ * @see https://fetch.spec.whatwg.org/#header-name
+ * @param {string} potentialValue
+ */
 function isValidHeaderName (potentialValue) {
-  if (potentialValue.length === 0) {
-    return false
-  }
-
   return isValidHTTPToken(potentialValue)
 }
 
@@ -26031,11 +26364,30 @@ function isCancelled (fetchParams) {
     fetchParams.controller.state === 'terminated'
 }
 
-// https://fetch.spec.whatwg.org/#concept-method-normalize
+const normalizeMethodRecord = {
+  delete: 'DELETE',
+  DELETE: 'DELETE',
+  get: 'GET',
+  GET: 'GET',
+  head: 'HEAD',
+  HEAD: 'HEAD',
+  options: 'OPTIONS',
+  OPTIONS: 'OPTIONS',
+  post: 'POST',
+  POST: 'POST',
+  put: 'PUT',
+  PUT: 'PUT'
+}
+
+// Note: object prototypes should not be able to be referenced. e.g. `Object#hasOwnProperty`.
+Object.setPrototypeOf(normalizeMethodRecord, null)
+
+/**
+ * @see https://fetch.spec.whatwg.org/#concept-method-normalize
+ * @param {string} method
+ */
 function normalizeMethod (method) {
-  return /^(DELETE|GET|HEAD|OPTIONS|POST|PUT)$/i.test(method)
-    ? method.toUpperCase()
-    : method
+  return normalizeMethodRecord[method.toLowerCase()] ?? method
 }
 
 // https://infra.spec.whatwg.org/#serialize-a-javascript-value-to-a-json-string
@@ -26204,14 +26556,7 @@ async function fullyReadBody (body, processBody, processBodyError) {
   }
 }
 
-/** @type {ReadableStream} */
-let ReadableStream = globalThis.ReadableStream
-
 function isReadableStreamLike (stream) {
-  if (!ReadableStream) {
-    ReadableStream = (__nccwpck_require__(5356).ReadableStream)
-  }
-
   return stream instanceof ReadableStream || (
     stream[Symbol.toStringTag] === 'ReadableStream' &&
     typeof stream.tee === 'function'
@@ -26242,9 +26587,10 @@ function isomorphicDecode (input) {
 function readableStreamClose (controller) {
   try {
     controller.close()
+    controller.byobRequest?.respond(0)
   } catch (err) {
     // TODO: add comment explaining why this error occurs.
-    if (!err.message.includes('Controller is already closed')) {
+    if (!err.message.includes('Controller is already closed') && !err.message.includes('ReadableStream is already closed')) {
       throw err
     }
   }
@@ -26332,10 +26678,172 @@ function urlIsHttpHttpsScheme (url) {
   return protocol === 'http:' || protocol === 'https:'
 }
 
+/** @type {import('./dataURL')['collectASequenceOfCodePoints']} */
+let collectASequenceOfCodePoints
+
 /**
- * Fetch supports node >= 16.8.0, but Object.hasOwn was added in v16.9.0.
+ * @see https://fetch.spec.whatwg.org/#simple-range-header-value
+ * @param {string} value
+ * @param {boolean} allowWhitespace
  */
-const hasOwn = Object.hasOwn || ((dict, key) => Object.prototype.hasOwnProperty.call(dict, key))
+function simpleRangeHeaderValue (value, allowWhitespace) {
+  // Note: avoid circular require
+  collectASequenceOfCodePoints ??= (__nccwpck_require__(685).collectASequenceOfCodePoints)
+
+  // 1. Let data be the isomorphic decoding of value.
+  // Note: isomorphic decoding takes a sequence of bytes (ie. a Uint8Array) and turns it into a string,
+  // nothing more. We obviously don't need to do that if value is a string already.
+  const data = value
+
+  // 2. If data does not start with "bytes", then return failure.
+  if (!data.startsWith('bytes')) {
+    return 'failure'
+  }
+
+  // 3. Let position be a position variable for data, initially pointing at the 5th code point of data.
+  const position = { position: 5 }
+
+  // 4. If allowWhitespace is true, collect a sequence of code points that are HTTP tab or space,
+  //    from data given position.
+  if (allowWhitespace) {
+    collectASequenceOfCodePoints(
+      (char) => char === '\t' || char === ' ',
+      data,
+      position
+    )
+  }
+
+  // 5. If the code point at position within data is not U+003D (=), then return failure.
+  if (data.charCodeAt(position.position) !== 0x3D) {
+    return 'failure'
+  }
+
+  // 6. Advance position by 1.
+  position.position++
+
+  // 7. If allowWhitespace is true, collect a sequence of code points that are HTTP tab or space, from
+  //    data given position.
+  if (allowWhitespace) {
+    collectASequenceOfCodePoints(
+      (char) => char === '\t' || char === ' ',
+      data,
+      position
+    )
+  }
+
+  // 8. Let rangeStart be the result of collecting a sequence of code points that are ASCII digits,
+  //    from data given position.
+  const rangeStart = collectASequenceOfCodePoints(
+    (char) => {
+      const code = char.charCodeAt(0)
+
+      return code >= 0x30 && code <= 0x39
+    },
+    data,
+    position
+  )
+
+  // 9. Let rangeStartValue be rangeStart, interpreted as decimal number, if rangeStart is not the
+  //    empty string; otherwise null.
+  const rangeStartValue = rangeStart.length ? Number(rangeStart) : null
+
+  // 10. If allowWhitespace is true, collect a sequence of code points that are HTTP tab or space,
+  //     from data given position.
+  if (allowWhitespace) {
+    collectASequenceOfCodePoints(
+      (char) => char === '\t' || char === ' ',
+      data,
+      position
+    )
+  }
+
+  // 11. If the code point at position within data is not U+002D (-), then return failure.
+  if (data.charCodeAt(position.position) !== 0x2D) {
+    return 'failure'
+  }
+
+  // 12. Advance position by 1.
+  position.position++
+
+  // 13. If allowWhitespace is true, collect a sequence of code points that are HTTP tab
+  //     or space, from data given position.
+  // Note from Khafra: its the same fucking step again lol
+  if (allowWhitespace) {
+    collectASequenceOfCodePoints(
+      (char) => char === '\t' || char === ' ',
+      data,
+      position
+    )
+  }
+
+  // 14. Let rangeEnd be the result of collecting a sequence of code points that are
+  //     ASCII digits, from data given position.
+  // Note from Khafra: you wouldn't guess it, but this is also the same step as #8
+  const rangeEnd = collectASequenceOfCodePoints(
+    (char) => {
+      const code = char.charCodeAt(0)
+
+      return code >= 0x30 && code <= 0x39
+    },
+    data,
+    position
+  )
+
+  // 15. Let rangeEndValue be rangeEnd, interpreted as decimal number, if rangeEnd
+  //     is not the empty string; otherwise null.
+  // Note from Khafra: THE SAME STEP, AGAIN!!!
+  // Note: why interpret as a decimal if we only collect ascii digits?
+  const rangeEndValue = rangeEnd.length ? Number(rangeEnd) : null
+
+  // 16. If position is not past the end of data, then return failure.
+  if (position.position < data.length) {
+    return 'failure'
+  }
+
+  // 17. If rangeEndValue and rangeStartValue are null, then return failure.
+  if (rangeEndValue === null && rangeStartValue === null) {
+    return 'failure'
+  }
+
+  // 18. If rangeStartValue and rangeEndValue are numbers, and rangeStartValue is
+  //     greater than rangeEndValue, then return failure.
+  // Note: ... when can they not be numbers?
+  if (rangeStartValue > rangeEndValue) {
+    return 'failure'
+  }
+
+  // 19. Return (rangeStartValue, rangeEndValue).
+  return { rangeStartValue, rangeEndValue }
+}
+
+/**
+ * @see https://fetch.spec.whatwg.org/#build-a-content-range
+ * @param {number} rangeStart
+ * @param {number} rangeEnd
+ * @param {number} fullLength
+ */
+function buildContentRange (rangeStart, rangeEnd, fullLength) {
+  // 1. Let contentRange be `bytes `.
+  let contentRange = 'bytes '
+
+  // 2. Append rangeStart, serialized and isomorphic encoded, to contentRange.
+  contentRange += isomorphicEncode(`${rangeStart}`)
+
+  // 3. Append 0x2D (-) to contentRange.
+  contentRange += '-'
+
+  // 4. Append rangeEnd, serialized and isomorphic encoded to contentRange.
+  contentRange += isomorphicEncode(`${rangeEnd}`)
+
+  // 5. Append 0x2F (/) to contentRange.
+  contentRange += '/'
+
+  // 6. Append fullLength, serialized and isomorphic encoded to contentRange.
+  contentRange += isomorphicEncode(`${fullLength}`)
+
+  // 7. Return contentRange.
+  return contentRange
+}
 
 module.exports = {
   isAborted,
@@ -26369,7 +26877,6 @@ module.exports = {
   makeIterator,
   isValidHeaderName,
   isValidHeaderValue,
-  hasOwn,
   isErrorLike,
   fullyReadBody,
   bytesMatch,
@@ -26380,7 +26887,10 @@ module.exports = {
   urlIsLocal,
   urlHasHttpsScheme,
   urlIsHttpHttpsScheme,
-  readAllBytes
+  readAllBytes,
+  normalizeMethodRecord,
+  simpleRangeHeaderValue,
+  buildContentRange
 }
 
 
@@ -26393,7 +26903,7 @@ module.exports = {
 
 
 const { types } = __nccwpck_require__(3837)
-const { hasOwn, toUSVString } = __nccwpck_require__(2538)
+const { toUSVString } = __nccwpck_require__(2538)
 
 /** @type {import('../../types/webidl').Webidl} */
 const webidl = {}
@@ -26738,7 +27248,7 @@ webidl.dictionaryConverter = function (converters) {
       const { key, defaultValue, required, converter } = options
 
       if (required === true) {
-        if (!hasOwn(dictionary, key)) {
+        if (!Object.hasOwn(dictionary, key)) {
           throw webidl.errors.exception({
             header: 'Dictionary',
             message: `Missing required key "${key}".`
@@ -26747,7 +27257,7 @@ webidl.dictionaryConverter = function (converters) {
       }
 
       let value = dictionary[key]
-      const hasDefault = hasOwn(options, 'defaultValue')
+      const hasDefault = Object.hasOwn(options, 'defaultValue')
 
       // Only use defaultValue if value is undefined and
       // a defaultValue options was provided.
@@ -26819,12 +27329,10 @@ webidl.converters.ByteString = function (V) {
   // 2. If the value of any element of x is greater than
   //    255, then throw a TypeError.
   for (let index = 0; index < x.length; index++) {
-    const charCode = x.charCodeAt(index)
-
-    if (charCode > 255) {
+    if (x.charCodeAt(index) > 255) {
       throw new TypeError(
         'Cannot convert argument to a ByteString because the character at ' +
-        `index ${index} has a value of ${charCode} which is greater than 255.`
+        `index ${index} has a value of ${x.charCodeAt(index)} which is greater than 255.`
       )
     }
   }
@@ -27811,7 +28319,6 @@ const {
 } = __nccwpck_require__(9054)
 const { ProgressEvent } = __nccwpck_require__(5504)
 const { getEncoding } = __nccwpck_require__(4854)
-const { DOMException } = __nccwpck_require__(1037)
 const { serializeAMimeType, parseMIMEType } = __nccwpck_require__(685)
 const { types } = __nccwpck_require__(3837)
 const { StringDecoder } = __nccwpck_require__(1576)
@@ -28420,7 +28927,7 @@ class RedirectHandler {
 
         For status 300, which is "Multiple Choices", the spec mentions both generating a Location
         response header AND a response body with the other possible location to follow.
-        Since the spec explicitily chooses not to specify a format for such body and leave it to
+        Since the spec explicitly chooses not to specify a format for such body and leave it to
         servers and browsers implementors, we ignore the body as there is no specified way to eventually parse it.
       */
     } else {
@@ -28436,7 +28943,7 @@ class RedirectHandler {
         TLDR: undici always ignores 3xx response trailers as they are not expected in case of redirections
         and neither are useful if present.
 
-        See comment on onData method above for more detailed informations.
+        See comment on onData method above for more detailed information.
       */
 
       this.location = null
@@ -28499,6 +29006,358 @@ function cleanRequestHeaders (headers, removeContent, unknownOrigin) {
 }
 
 module.exports = RedirectHandler
+
+
+/***/ }),
+
+/***/ 2286:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const assert = __nccwpck_require__(9491)
+
+const { kRetryHandlerDefaultRetry } = __nccwpck_require__(2785)
+const { RequestRetryError } = __nccwpck_require__(8045)
+const { isDisturbed, parseHeaders, parseRangeHeader } = __nccwpck_require__(3983)
+
+function calculateRetryAfterHeader (retryAfter) {
+  const current = Date.now()
+  const diff = new Date(retryAfter).getTime() - current
+
+  return diff
+}
+
+class RetryHandler {
+  constructor (opts, handlers) {
+    const { retryOptions, ...dispatchOpts } = opts
+    const {
+      // Retry scoped
+      retry: retryFn,
+      maxRetries,
+      maxTimeout,
+      minTimeout,
+      timeoutFactor,
+      // Response scoped
+      methods,
+      errorCodes,
+      retryAfter,
+      statusCodes
+    } = retryOptions ?? {}
+
+    this.dispatch = handlers.dispatch
+    this.handler = handlers.handler
+    this.opts = dispatchOpts
+    this.abort = null
+    this.aborted = false
+    this.retryOpts = {
+      retry: retryFn ?? RetryHandler[kRetryHandlerDefaultRetry],
+      retryAfter: retryAfter ?? true,
+      maxTimeout: maxTimeout ?? 30 * 1000, // 30s,
+      timeout: minTimeout ?? 500, // .5s
+      timeoutFactor: timeoutFactor ?? 2,
+      maxRetries: maxRetries ?? 5,
+      // What errors we should retry
+      methods: methods ?? ['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE', 'TRACE'],
+      // Indicates which errors to retry
+      statusCodes: statusCodes ?? [500, 502, 503, 504, 429],
+      // List of errors to retry
+      errorCodes: errorCodes ?? [
+        'ECONNRESET',
+        'ECONNREFUSED',
+        'ENOTFOUND',
+        'ENETDOWN',
+        'ENETUNREACH',
+        'EHOSTDOWN',
+        'EHOSTUNREACH',
+        'EPIPE'
+      ]
+    }
+
+    this.retryCount = 0
+    this.start = 0
+    this.end = null
+    this.etag = null
+    this.resume = null
+
+    // Handle possible onConnect duplication
+    this.handler.onConnect(reason => {
+      this.aborted = true
+      if (this.abort) {
+        this.abort(reason)
+      } else {
+        this.reason = reason
+      }
+    })
+  }
+
+  onRequestSent () {
+    if (this.handler.onRequestSent) {
+      this.handler.onRequestSent()
+    }
+  }
+
+  onUpgrade (statusCode, headers, socket) {
+    if (this.handler.onUpgrade) {
+      this.handler.onUpgrade(statusCode, headers, socket)
+    }
+  }
+
+  onConnect (abort) {
+    if (this.aborted) {
+      abort(this.reason)
+    } else {
+      this.abort = abort
+    }
+  }
+
+  onBodySent (chunk) {
+    if (this.handler.onBodySent) return this.handler.onBodySent(chunk)
+  }
+
+  static [kRetryHandlerDefaultRetry] (err, { state, opts }, cb) {
+    const { statusCode, code, headers } = err
+    const { method, retryOptions } = opts
+    const {
+      maxRetries,
+      timeout,
+      maxTimeout,
+      timeoutFactor,
+      statusCodes,
+      errorCodes,
+      methods
+    } = retryOptions
+    let { counter, currentTimeout } = state
+
+    currentTimeout =
+      currentTimeout != null && currentTimeout > 0 ? currentTimeout : timeout
+
+    // Any code that is not a Undici's originated and allowed to retry
+    if (
+      code &&
+      code !== 'UND_ERR_REQ_RETRY' &&
+      code !== 'UND_ERR_SOCKET' &&
+      !errorCodes.includes(code)
+    ) {
+      cb(err)
+      return
+    }
+
+    // If a set of method are provided and the current method is not in the list
+    if (Array.isArray(methods) && !methods.includes(method)) {
+      cb(err)
+      return
+    }
+
+    // If a set of status code are provided and the current status code is not in the list
+    if (
+      statusCode != null &&
+      Array.isArray(statusCodes) &&
+      !statusCodes.includes(statusCode)
+    ) {
+      cb(err)
+      return
+    }
+
+    // If we reached the max number of retries
+    if (counter > maxRetries) {
+      cb(err)
+      return
+    }
+
+    let retryAfterHeader = headers != null && headers['retry-after']
+    if (retryAfterHeader) {
+      retryAfterHeader = Number(retryAfterHeader)
+      retryAfterHeader = isNaN(retryAfterHeader)
+        ? calculateRetryAfterHeader(retryAfterHeader)
+        : retryAfterHeader * 1e3 // Retry-After is in seconds
+    }
+
+    const retryTimeout =
+      retryAfterHeader > 0
+        ? Math.min(retryAfterHeader, maxTimeout)
+        : Math.min(currentTimeout * timeoutFactor ** counter, maxTimeout)
+
+    state.currentTimeout = retryTimeout
+
+    setTimeout(() => cb(null), retryTimeout)
+  }
+
+  onHeaders (statusCode, rawHeaders, resume, statusMessage) {
+    const headers = parseHeaders(rawHeaders)
+
+    this.retryCount += 1
+
+    if (statusCode >= 300) {
+      if (this.retryOpts.statusCodes.includes(statusCode) === false) {
+        return this.handler.onHeaders(
+          statusCode,
+          rawHeaders,
+          resume,
+          statusMessage
+        )
+      } else {
+        this.abort(
+          new RequestRetryError('Request failed', statusCode, {
+            headers,
+            count: this.retryCount
+          })
+        )
+        return false
+      }
+    }
+
+    // Checkpoint for resume from where we left it
+    if (this.resume != null) {
+      this.resume = null
+
+      if (statusCode !== 206) {
+        return true
+      }
+
+      const contentRange = parseRangeHeader(headers['content-range'])
+      // If no content range
+      if (!contentRange) {
+        this.abort(
+          new RequestRetryError('Content-Range mismatch', statusCode, {
+            headers,
+            count: this.retryCount
+          })
+        )
+        return false
+      }
+
+      // Let's start with a weak etag check
+      if (this.etag != null && this.etag !== headers.etag) {
+        this.abort(
+          new RequestRetryError('ETag mismatch', statusCode, {
+            headers,
+            count: this.retryCount
+          })
+        )
+        return false
+      }
+
+      const { start, size, end = size } = contentRange
+
+      assert(this.start === start, 'content-range mismatch')
+      assert(this.end == null || this.end === end, 'content-range mismatch')
+
+      this.resume = resume
+      return true
+    }
+
+    if (this.end == null) {
+      if (statusCode === 206) {
+        // First time we receive 206
+        const range = parseRangeHeader(headers['content-range'])
+
+        if (range == null) {
+          return this.handler.onHeaders(
+            statusCode,
+            rawHeaders,
+            resume,
+            statusMessage
+          )
+        }
+
+        const { start, size, end = size } = range
+
+        assert(
+          start != null && Number.isFinite(start) && this.start !== start,
+          'content-range mismatch'
+        )
+        assert(Number.isFinite(start))
+        assert(
+          end != null && Number.isFinite(end) && this.end !== end,
+          'invalid content-length'
+        )
+
+        this.start = start
+        this.end = end
+      }
+
+      // We make our best to checkpoint the body for further range headers
+      if (this.end == null) {
+        const contentLength = headers['content-length']
+        this.end = contentLength != null ? Number(contentLength) : null
+      }
+
+      assert(Number.isFinite(this.start))
+      assert(
+        this.end == null || Number.isFinite(this.end),
+        'invalid content-length'
+      )
+
+      this.resume = resume
+      this.etag = headers.etag != null ? headers.etag : null
+
+      return this.handler.onHeaders(
+        statusCode,
+        rawHeaders,
+        resume,
+        statusMessage
+      )
+    }
+
+    const err = new RequestRetryError('Request failed', statusCode, {
+      headers,
+      count: this.retryCount
+    })
+
+    this.abort(err)
+
+    return false
+  }
+
+  onData (chunk) {
+    this.start += chunk.length
+
+    return this.handler.onData(chunk)
+  }
+
+  onComplete (rawTrailers) {
+    this.retryCount = 0
+    return this.handler.onComplete(rawTrailers)
+  }
+
+  onError (err) {
+    if (this.aborted || isDisturbed(this.opts.body)) {
+      return this.handler.onError(err)
+    }
+
+    this.retryOpts.retry(
+      err,
+      {
+        state: { counter: this.retryCount++, currentTimeout: this.retryAfter },
+        opts: { retryOptions: this.retryOpts, ...this.opts }
+      },
+      onRetry.bind(this)
+    )
+
+    function onRetry (err) {
+      if (err != null || this.aborted || isDisturbed(this.opts.body)) {
+        return this.handler.onError(err)
+      }
+
+      if (this.start !== 0) {
+        this.opts = {
+          ...this.opts,
+          headers: {
+            ...this.opts.headers,
+            range: `bytes=${this.start}-${this.end ?? ''}`
+          }
+        }
+      }
+
+      try {
+        this.dispatch(this.opts, this)
+      } catch (err) {
+        this.handler.onError(err)
+      }
+    }
+  }
+}
+
+module.exports = RetryHandler
 
 
 /***/ }),
@@ -30423,6 +31282,9 @@ class ProxyAgent extends DispatcherBase {
     this[kProxyTls] = opts.proxyTls
     this[kProxyHeaders] = opts.headers || {}
 
+    const resolvedUrl = new URL(opts.uri)
+    const { origin, port, host, username, password } = resolvedUrl
+
     if (opts.auth && opts.token) {
       throw new InvalidArgumentError('opts.auth cannot be used in combination with opts.token')
     } else if (opts.auth) {
@@ -30430,10 +31292,9 @@ class ProxyAgent extends DispatcherBase {
       this[kProxyHeaders]['proxy-authorization'] = `Basic ${opts.auth}`
     } else if (opts.token) {
       this[kProxyHeaders]['proxy-authorization'] = opts.token
+    } else if (username && password) {
+      this[kProxyHeaders]['proxy-authorization'] = `Basic ${Buffer.from(`${decodeURIComponent(username)}:${decodeURIComponent(password)}`).toString('base64')}`
     }
-
-    const resolvedUrl = new URL(opts.uri)
-    const { origin, port, host } = resolvedUrl
 
     const connect = buildConnector({ ...opts.proxyTls })
     this[kConnectEndpoint] = buildConnector({ ...opts.requestTls })
@@ -30458,7 +31319,7 @@ class ProxyAgent extends DispatcherBase {
           })
           if (statusCode !== 200) {
             socket.on('error', () => {}).destroy()
-            callback(new RequestAbortedError('Proxy response !== 200 when HTTP Tunneling'))
+            callback(new RequestAbortedError(`Proxy response (${statusCode}) !== 200 when HTTP Tunneling`))
           }
           if (opts.protocol !== 'https:') {
             callback(null, socket)
@@ -30919,6 +31780,7 @@ function onSocketClose () {
   //    attribute initialized to the result of applying UTF-8
   //    decode without BOM to the WebSocket connection close
   //    reason.
+  // TODO: process.nextTick
   fireEvent('close', ws, CloseEvent, {
     wasClean, code, reason
   })
@@ -31962,6 +32824,7 @@ function failWebsocketConnection (ws, reason) {
   }
 
   if (reason) {
+    // TODO: process.nextTick
     fireEvent('error', ws, ErrorEvent, {
       error: new Error(reason)
     })
@@ -31989,7 +32852,6 @@ module.exports = {
 
 
 const { webidl } = __nccwpck_require__(1744)
-const { DOMException } = __nccwpck_require__(1037)
 const { URLSerializer } = __nccwpck_require__(685)
 const { getGlobalOrigin } = __nccwpck_require__(1246)
 const { staticPropertyDescriptors, states, opcodes, emptyBuffer } = __nccwpck_require__(9188)
@@ -32946,14 +33808,6 @@ module.exports = require("querystring");
 
 "use strict";
 module.exports = require("stream");
-
-/***/ }),
-
-/***/ 5356:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("stream/web");
 
 /***/ }),
 
