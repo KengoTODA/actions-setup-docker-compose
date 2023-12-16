@@ -9,6 +9,6 @@
     }
   ],
   "extends": [
-    "config:base"
+    "config:recommended"
   ]
 }
