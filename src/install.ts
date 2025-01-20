@@ -1,7 +1,7 @@
 import {cacheFile, downloadTool} from '@actions/tool-cache'
 import {exec} from '@actions/exec'
 import * as core from '@actions/core'
-import {Octokit} from '@octokit/action'
+const {Octokit} = import('@octokit/action')
 
 export async function runCommand(command: string): Promise<string> {
   let output = ''
