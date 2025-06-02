@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {install} from './install'
+import {install} from './install.js'
 
 async function run(): Promise<void> {
   try {
