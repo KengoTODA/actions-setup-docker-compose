@@ -37245,13 +37245,22 @@ async function installOnLinux(version) {
     const cachedPath = await (0,tool_cache.cacheFile)(installerPath, 'docker-compose', 'docker-compose', version);
     return cachedPath;
 }
-async function findLatestVersion() {
+// Default implementation for GitHub API call
+async function getLatestReleaseTag(owner, repo) {
     const octokit = new dist_bundle_Octokit();
     const response = await octokit.repos.getLatestRelease({
-        owner: 'docker',
-        repo: 'compose'
+        owner,
+        repo
     });
     return response.data.tag_name;
+}
+// Allow overriding the implementation for testing
+let getLatestReleaseTagImpl = getLatestReleaseTag;
+function setGetLatestReleaseTagImpl(impl) {
+    getLatestReleaseTagImpl = impl;
+}
+async function findLatestVersion() {
+    return await getLatestReleaseTagImpl('docker', 'compose');
 }
 async function install(version) {
     if (version === 'latest') {

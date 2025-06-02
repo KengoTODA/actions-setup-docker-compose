@@ -36,13 +36,30 @@ async function installOnLinux(version: string): Promise<string> {
   return cachedPath
 }
 
-async function findLatestVersion(): Promise<string> {
+// Default implementation for GitHub API call
+export async function getLatestReleaseTag(
+  owner: string,
+  repo: string
+): Promise<string> {
   const octokit = new Octokit()
   const response = await octokit.repos.getLatestRelease({
-    owner: 'docker',
-    repo: 'compose'
+    owner,
+    repo
   })
   return response.data.tag_name
+}
+
+// Allow overriding the implementation for testing
+let getLatestReleaseTagImpl = getLatestReleaseTag
+
+export function setGetLatestReleaseTagImpl(
+  impl: typeof getLatestReleaseTag
+): void {
+  getLatestReleaseTagImpl = impl
+}
+
+async function findLatestVersion(): Promise<string> {
+  return await getLatestReleaseTagImpl('docker', 'compose')
 }
 
 export async function install(version: string): Promise<string> {
