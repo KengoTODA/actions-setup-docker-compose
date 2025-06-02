@@ -45,6 +45,8 @@ jobs:
         with:
           version: 'v2.4.1'
       - uses: ./
+        with:
+          version: 'latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
