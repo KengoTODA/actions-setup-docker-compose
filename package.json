@@ -2,6 +2,7 @@
   "name": "@kengotoda/actions-setup-docker-compose",
   "version": "1.2.3",
   "description": "the GitHub Action setting up docker-compose command",
+  "type": "module",
   "main": "lib/main.js",
   "private": false,
   "publishConfig": {
@@ -13,7 +14,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map",
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
@@ -31,7 +32,7 @@
     "@actions/core": "^1.10.0",
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.1",
-    "@octokit/action": "^6.0.7"
+    "@octokit/action": "^7.0.0"
   },
   "devDependencies": {
     "@semantic-release/exec": "^7.0.0",
