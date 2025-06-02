@@ -27,6 +27,6 @@ Or set a `GITHUB_TOKEN` environment variable, to use the latest released version
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-The 'latest release' here means [the most recent non-prerelease, non-draft release, sorted by the created_at attribute](https://octokit.github.io/rest.js/v19#repos-get-latest-release).
+The 'latest release' here means [the most recent non-prerelease, non-draft release, sorted by the created_at attribute](https://docs.github.com/en/rest/releases/releases#get-the-latest-release).
 
 Note that the `GITHUB_TOKEN` should have [`contents: read` permission](https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#contents) to fetch data from the GitHub.com.
