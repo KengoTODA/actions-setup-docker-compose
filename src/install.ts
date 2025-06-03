@@ -1,7 +1,8 @@
 import {cacheFile, downloadTool} from '@actions/tool-cache'
 import {exec} from '@actions/exec'
 import * as core from '@actions/core'
-import {Octokit} from '@octokit/action'
+import {Octokit} from '@octokit/core'
+import {restEndpointMethods} from '@octokit/plugin-rest-endpoint-methods'
 
 export async function runCommand(command: string): Promise<string> {
   let output = ''
@@ -37,8 +38,17 @@ async function installOnLinux(version: string): Promise<string> {
 }
 
 async function findLatestVersion(): Promise<string> {
-  const octokit = new Octokit()
-  const response = await octokit.repos.getLatestRelease({
+  const token = process.env.GITHUB_TOKEN
+  if (!token) {
+    throw new Error(
+      'GITHUB_TOKEN environment variable is required to fetch the latest version'
+    )
+  }
+  const MyOctokit = Octokit.plugin(restEndpointMethods)
+  const octokit = new MyOctokit({
+    auth: token
+  })
+  const response = await octokit.rest.repos.getLatestRelease({
     owner: 'docker',
     repo: 'compose'
   })
