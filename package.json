@@ -3,7 +3,6 @@
   "version": "1.2.3",
   "description": "the GitHub Action setting up docker-compose command",
   "main": "lib/main.js",
-  "type": "module",
   "private": false,
   "publishConfig": {
     "access": "public"
