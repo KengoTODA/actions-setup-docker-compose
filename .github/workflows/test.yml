@@ -9,6 +9,9 @@ on: # rebuild any PRs and main branch changes
 jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC
     steps:
       - uses: actions/checkout@v6
         with:
@@ -23,6 +26,7 @@ jobs:
         with:
           cache: npm
           node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
       - run: |
           npm ci
           npm run all
@@ -33,7 +37,6 @@ jobs:
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     permissions:
