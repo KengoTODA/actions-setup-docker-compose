@@ -14,6 +14,11 @@ jobs:
         with:
           # Make sure the release step uses its own credentials.
           persist-credentials: false
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
       - uses: actions/setup-node@v6
         with:
           cache: npm
@@ -22,12 +27,12 @@ jobs:
           npm ci
           npm run all
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Run semantic-release
         run: |
           npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TO_PUSH }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
