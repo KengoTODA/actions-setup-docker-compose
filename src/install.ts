@@ -1,4 +1,4 @@
-import {cacheFile, downloadTool} from '@actions/tool-cache'
+import {cacheFile, downloadTool, find} from '@actions/tool-cache'
 import {exec} from '@actions/exec'
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/core'
@@ -24,6 +24,10 @@ async function installOnLinux(version: string): Promise<string> {
   const hardware = runCommand('uname -m')
   if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
     version = `v${version}`
+  }
+  const cached = find('docker-compose', version)
+  if (cached) {
+    return cached
   }
   const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`
   const installerPath = await downloadTool(url)

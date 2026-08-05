@@ -62,16 +62,22 @@ async function runCommand(command) {
     return output.trim();
 }
 async function installOnLinux(version) {
-    const system = runCommand('uname -s');
-    const hardware = runCommand('uname -m');
+    // Normalize version prefix before cache lookup so the key is consistent
     if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
         version = `v${version}`;
     }
+    // Return the cached binary if this version was already installed
+    const cached = (0, tool_cache_1.find)('docker-compose', version);
+    if (cached) {
+        core.debug(`Found docker-compose ${version} in tool cache`);
+        return cached;
+    }
+    const system = runCommand('uname -s');
+    const hardware = runCommand('uname -m');
     const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`;
     const installerPath = await (0, tool_cache_1.downloadTool)(url);
     await (0, exec_1.exec)(`chmod +x ${installerPath}`);
-    const cachedPath = await (0, tool_cache_1.cacheFile)(installerPath, 'docker-compose', 'docker-compose', version);
-    return cachedPath;
+    return (0, tool_cache_1.cacheFile)(installerPath, 'docker-compose', 'docker-compose', version);
 }
 async function findLatestVersion() {
     const token = process.env.GITHUB_TOKEN;
