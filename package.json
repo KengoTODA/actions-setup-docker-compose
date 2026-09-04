@@ -52,6 +52,11 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.54.0"
   },
+  "overrides": {
+    "babel-plugin-istanbul": {
+      "test-exclude": "7.0.2"
+    }
+  },
   "release": {
     "branches": "main",
     "plugins": [
