@@ -32,3 +32,21 @@ Or set a `GITHUB_TOKEN` environment variable, to use the latest released version
 The 'latest release' here means [the most recent non-prerelease, non-draft release, sorted by the created_at attribute](https://docs.github.com/en/rest/releases/releases#get-the-latest-release).
 
 Note that the `GITHUB_TOKEN` should have [`contents: read` permission](https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#contents) to fetch data from the GitHub.com.
+
+## Development
+
+Use the Node.js version specified in [.nvmrc](.nvmrc) and the pnpm version
+specified by `packageManager` in [package.json](package.json). Enable Corepack
+once, then install the locked dependencies and run the checks:
+
+```sh
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run all
+```
+
+`pnpm-workspace.yaml` requires dependencies to be at least three days old,
+checks the exact pnpm version, rejects unreviewed dependency build scripts,
+and rejects publication trust downgrades. Review dependency build scripts
+before explicitly allowing them in the workspace configuration. Commit
+`pnpm-lock.yaml` whenever dependencies change.
