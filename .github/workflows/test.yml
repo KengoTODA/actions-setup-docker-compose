@@ -22,19 +22,20 @@ jobs:
         with:
           client-id: ${{ vars.CLIENT_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
-          cache: npm
+          cache: pnpm
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
       - run: |
-          npm ci
-          npm run all
+          pnpm install --frozen-lockfile
+          pnpm run all
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Run semantic-release
         run: |
-          npx semantic-release
+          pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
   test: # make sure the action works on a clean machine without building

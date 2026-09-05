@@ -1,0 +1,7 @@
+minimumReleaseAge: 4320
+packageManagerStrictVersion: true
+strictDepBuilds: true
+trustPolicy: no-downgrade
+
+overrides:
+  babel-plugin-istanbul>test-exclude: 7.0.2
