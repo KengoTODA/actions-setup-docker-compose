@@ -1,5 +1,5 @@
 minimumReleaseAge: 4320
-packageManagerStrictVersion: true
+pmOnFail: error
 strictDepBuilds: true
 trustPolicy: no-downgrade
 
