@@ -5,6 +5,8 @@ trustPolicy: no-downgrade
 
 overrides:
   babel-plugin-istanbul>test-exclude: 7.0.2
+  # Keep Istanbul's js-yaml 3 API while applying the YAML DoS fixes.
+  '@istanbuljs/load-nyc-config@1.1.0>js-yaml': 3.15.1
   # Babel 7 still requests semver 6, whose latest release fails trustPolicy.
   # Keep Babel/Jest on their current majors and use the reviewed semver 7 API.
   '@babel/core@7.29.7>semver': 7.7.3
