@@ -7,7 +7,7 @@ module.exports = {
   transform: {
     '^.+\\.ts$': [
       'ts-jest',
-      {useESM: true, tsconfig: {module: 'ESNext', moduleResolution: 'Bundler'}}
+      {useESM: true, tsconfig: '<rootDir>/tsconfig.test.json'}
     ]
   },
   moduleNameMapper: {
