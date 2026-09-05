@@ -23,9 +23,12 @@ jobs:
           client-id: ${{ vars.CLIENT_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
       - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          cache: true
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
-          cache: pnpm
+          package-manager-cache: false
+
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
       - run: |

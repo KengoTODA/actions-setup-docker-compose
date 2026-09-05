@@ -35,7 +35,8 @@ Note that the `GITHUB_TOKEN` should have [`contents: read` permission](https://d
 
 ## Development
 
-Use Node.js 24 and pnpm 10.34.5, pinned in `package.json`. Enable Corepack
+Use the Node.js version specified in [.nvmrc](.nvmrc) and the pnpm version
+specified by `packageManager` in [package.json](package.json). Enable Corepack
 once, then install the locked dependencies and run the checks:
 
 ```sh
