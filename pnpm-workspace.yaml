@@ -5,3 +5,12 @@ trustPolicy: no-downgrade
 
 overrides:
   babel-plugin-istanbul>test-exclude: 7.0.2
+  # Babel 7 still requests semver 6, whose latest release fails trustPolicy.
+  # Keep Babel/Jest on their current majors and use the reviewed semver 7 API.
+  '@babel/core@7.29.7>semver': 7.7.3
+  '@babel/helper-compilation-targets@7.29.7>semver': 7.7.3
+
+# Native bindings are supplied by the locked optional dependencies.
+# Do not run the installer or allow fallback downloads.
+allowBuilds:
+  unrs-resolver: false
