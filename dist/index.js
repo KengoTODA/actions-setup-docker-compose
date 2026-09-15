@@ -34782,7 +34782,7 @@ function find(toolName, versionSpec, arch) {
     if (!versionSpec) {
         throw new Error('versionSpec parameter is required');
     }
-    arch = arch || os.arch();
+    arch = arch || external_os_namespaceObject.arch();
     // attempt to resolve an explicit version
     if (!isExplicitVersion(versionSpec)) {
         const localVersions = findAllVersions(toolName, arch);
@@ -34792,15 +34792,15 @@ function find(toolName, versionSpec, arch) {
     // check for the explicit version in the cache
     let toolPath = '';
     if (versionSpec) {
-        versionSpec = semver.clean(versionSpec) || '';
-        const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
-        core.debug(`checking cache: ${cachePath}`);
-        if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
-            core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
+        versionSpec = node_modules_semver.clean(versionSpec) || '';
+        const cachePath = external_path_namespaceObject.join(_getCacheDirectory(), toolName, versionSpec, arch);
+        core_debug(`checking cache: ${cachePath}`);
+        if (external_fs_namespaceObject.existsSync(cachePath) && external_fs_namespaceObject.existsSync(`${cachePath}.complete`)) {
+            core_debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
             toolPath = cachePath;
         }
         else {
-            core.debug('not found');
+            core_debug('not found');
         }
     }
     return toolPath;
@@ -34813,14 +34813,14 @@ function find(toolName, versionSpec, arch) {
  */
 function findAllVersions(toolName, arch) {
     const versions = [];
-    arch = arch || os.arch();
-    const toolPath = path.join(_getCacheDirectory(), toolName);
-    if (fs.existsSync(toolPath)) {
-        const children = fs.readdirSync(toolPath);
+    arch = arch || external_os_namespaceObject.arch();
+    const toolPath = external_path_namespaceObject.join(_getCacheDirectory(), toolName);
+    if (external_fs_namespaceObject.existsSync(toolPath)) {
+        const children = external_fs_namespaceObject.readdirSync(toolPath);
         for (const child of children) {
             if (isExplicitVersion(child)) {
-                const fullPath = path.join(toolPath, child, arch || '');
-                if (fs.existsSync(fullPath) && fs.existsSync(`${fullPath}.complete`)) {
+                const fullPath = external_path_namespaceObject.join(toolPath, child, arch || '');
+                if (external_fs_namespaceObject.existsSync(fullPath) && external_fs_namespaceObject.existsSync(`${fullPath}.complete`)) {
                     versions.push(child);
                 }
             }
@@ -34904,10 +34904,10 @@ function _completeToolPath(tool, version, arch) {
  * @param versionSpec      version string to check
  */
 function isExplicitVersion(versionSpec) {
-    const c = semver.clean(versionSpec) || '';
-    core.debug(`isExplicit: ${c}`);
-    const valid = semver.valid(c) != null;
-    core.debug(`explicit? ${valid}`);
+    const c = node_modules_semver.clean(versionSpec) || '';
+    core_debug(`isExplicit: ${c}`);
+    const valid = node_modules_semver.valid(c) != null;
+    core_debug(`explicit? ${valid}`);
     return valid;
 }
 /**
@@ -34918,26 +34918,26 @@ function isExplicitVersion(versionSpec) {
  */
 function evaluateVersions(versions, versionSpec) {
     let version = '';
-    core.debug(`evaluating ${versions.length} versions`);
+    core_debug(`evaluating ${versions.length} versions`);
     versions = versions.sort((a, b) => {
-        if (semver.gt(a, b)) {
+        if (node_modules_semver.gt(a, b)) {
             return 1;
         }
         return -1;
     });
     for (let i = versions.length - 1; i >= 0; i--) {
         const potential = versions[i];
-        const satisfied = semver.satisfies(potential, versionSpec);
+        const satisfied = node_modules_semver.satisfies(potential, versionSpec);
         if (satisfied) {
             version = potential;
             break;
         }
     }
     if (version) {
-        core.debug(`matched: ${version}`);
+        core_debug(`matched: ${version}`);
     }
     else {
-        core.debug('match not found');
+        core_debug('match not found');
     }
     return version;
 }
@@ -39336,11 +39336,16 @@ async function runCommand(command) {
     return output.trim();
 }
 async function installOnLinux(version) {
-    const system = runCommand('uname -s');
-    const hardware = runCommand('uname -m');
     if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
         version = `v${version}`;
     }
+    const cached = find('docker-compose', version);
+    if (cached) {
+        core_debug(`Found docker-compose ${version} in tool cache`);
+        return cached;
+    }
+    const system = runCommand('uname -s');
+    const hardware = runCommand('uname -m');
     const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`;
     const installerPath = await downloadTool(url);
     await exec_exec(`chmod +x ${installerPath}`);
