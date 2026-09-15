@@ -13,28 +13,31 @@ jobs:
       contents: read
       id-token: write  # Required for OIDC
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           # Make sure the release step uses its own credentials.
           persist-credentials: false
-      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
-          app-id: ${{ vars.APP_ID }}
+          client-id: ${{ vars.CLIENT_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          cache: true
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
-          cache: npm
+          package-manager-cache: false
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
       - run: |
-          npm ci
-          npm run all
+          pnpm install --frozen-lockfile
+          pnpm run all
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Run semantic-release
         run: |
-          npx semantic-release
+          pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
   test: # make sure the action works on a clean machine without building
@@ -42,7 +45,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: ./
         with:
           version: '1.26.2'
@@ -64,7 +67,7 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: reviewdog/action-actionlint@e58ee9d111489c31395fbe4857b0be6e7635dbda # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

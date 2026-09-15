@@ -20,15 +20,16 @@ export async function runCommand(command: string): Promise<string> {
 }
 
 async function installOnLinux(version: string): Promise<string> {
-  const system = runCommand('uname -s')
-  const hardware = runCommand('uname -m')
   if (!version.startsWith('v') && parseInt(version.split('.')[0], 10) >= 2) {
     version = `v${version}`
   }
   const cached = find('docker-compose', version)
   if (cached) {
+    core.debug(`Found docker-compose ${version} in tool cache`)
     return cached
   }
+  const system = runCommand('uname -s')
+  const hardware = runCommand('uname -m')
   const url = `https://github.com/docker/compose/releases/download/${version}/docker-compose-${await system}-${await hardware}`
   const installerPath = await downloadTool(url)
   await exec(`chmod +x ${installerPath}`)
