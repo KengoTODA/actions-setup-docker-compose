@@ -5,6 +5,10 @@ trustPolicy: no-downgrade
 
 overrides:
   babel-plugin-istanbul>test-exclude: 7.0.2
+  # Keep each minimatch major while using patched brace-expansion releases.
+  minimatch@3>brace-expansion: 1.1.21
+  minimatch@9>brace-expansion: 2.1.7
+  minimatch@10>brace-expansion: 5.0.12
   # Keep Istanbul's js-yaml 3 API while applying the YAML DoS fixes.
   '@istanbuljs/load-nyc-config@1.1.0>js-yaml': 3.15.2
   # Babel 7 still requests semver 6, whose latest release fails trustPolicy.
